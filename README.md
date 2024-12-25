@@ -1,7 +1,7 @@
 # GY Accounts Website
 
 [![developer](https://img.shields.io/badge/developed-GYCODING-B833FF?style=for-the-badge)](https://gycoding.com)
-[![website](https://img.shields.io/badge/website-link-lightgrey?style=for-the-badge)](#)
+[![website](https://img.shields.io/badge/website-link-lightgrey?style=for-the-badge)](accounts.gycoding.com)
 
 <br>
 
