@@ -243,3 +243,7 @@ lint/tmp/
 *.hprof
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Java,Swift,react,Kotlin,Android
+.next/build-manifest.json
+.next
+.env.local
+.vscode
