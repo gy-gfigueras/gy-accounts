@@ -1,12 +1,11 @@
-import type { Config } from "tailwindcss"
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './pages/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
+    './app/**/*.{js,jsx,ts,tsx}',
+    './src/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     container: {
@@ -17,10 +16,6 @@ const config: Config = {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['var(--font-lexend)'],
-        valorant: ['var(--font-valorant)'],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -55,10 +50,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gy: {
-          purple: "#8B5CF6",
-          magenta: "#E879F9",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,12 +58,12 @@ const config: Config = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
+          from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          to: { height: 0 },
         },
       },
       animation: {
@@ -83,5 +74,3 @@ const config: Config = {
   },
   plugins: [require("tailwindcss-animate")],
 }
-
-export default config;

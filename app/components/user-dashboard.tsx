@@ -2,114 +2,77 @@
 "use client"
 
 import { useUser } from "@auth0/nextjs-auth0/client"
-import { useState, useMemo, useEffect } from "react"
+import { useState } from "react"
 import { ThemeSwitch } from "./theme-switch"
 import Image from "next/image"
 import { lexendFont, valorantFont } from "../utils/fonts"
 import { ProfileSkeleton } from "./profile-skeleton"
-import { UserUpdateData } from "../types/user"
+import { User, UserUpdateData } from "../types/user"
 import { RoleChip } from "./role-chip"
-import { getUser, GyCodingUser } from "../service/user"
 import { Phone, Mail } from "lucide-react"
+import { useGycodingUser } from "../hooks/useGycodingUser"
+import { updateUser } from "../service/user"
 
 const DEFAULT_AVATAR = "/default-avatar.png"
 
 export function UserDashboard() {
-  const { user: auth0User, error: auth0Error, isLoading: auth0Loading } = useUser()
-  const [gyCodingUser, setGyCodingUser] = useState<GyCodingUser | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
+  const { user, isLoading: auth0Loading } = useUser()
+  const { data: gyUser, isLoading: gyUserLoading, error: userError } = useGycodingUser()
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState<UserUpdateData>({
     username: "",
     email: "",
-    phoneNumber: null,
-    picture: DEFAULT_AVATAR,
+    picture: "",
+    phoneNumber: null
   })
 
-  useEffect(() => {
-    async function fetchGyCodingUser() {
-      try {
-        if (auth0User) {
-          const userData = await getUser()
-          if (userData) {
-            setGyCodingUser(userData.gyCodingUser)
-            setEditData({
-              username: userData.gyCodingUser.username || "",
-              email: userData.gyCodingUser.email || "",
-              phoneNumber: userData.gyCodingUser.phoneNumber,
-              picture: userData.gyCodingUser.picture || DEFAULT_AVATAR,
-            })
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching GyCoding user:', err)
-        setError('Error loading user data')
-      }
-    }
-
-    fetchGyCodingUser()
-  }, [auth0User])
-
-  useMemo(() => {
-    setMounted(true)
-  }, [])
-
   const handleEditClick = () => {
+    setEditData({
+      username: gyUser?.username || "",
+      email: gyUser?.email || "",
+      picture: gyUser?.picture || "",
+      phoneNumber: gyUser?.phoneNumber || null
+    })
     setIsEditing(true)
   }
 
   const handleCancelEdit = () => {
     setIsEditing(false)
-    // Restaurar datos originales
-    if (gyCodingUser) {
-      setEditData({
-        username: gyCodingUser.username || "",
-        email: gyCodingUser.email || "",
-        phoneNumber: gyCodingUser.phoneNumber,
-        picture: gyCodingUser.picture || DEFAULT_AVATAR,
-      })
-    }
+    setEditData({
+      username: "",
+      email: "",
+      picture: "",
+      phoneNumber: null
+    })
   }
 
   const handleSaveEdit = async () => {
-    try {
-      // TODO: Implementar la llamada a la API para guardar cambios
-      setIsEditing(false)
-    } catch (err) {
-      console.error('Error saving changes:', err)
-      setError('Error saving changes')
+    try{
+      await updateUser(gyUser as User)
+    } catch (error) {
+      console.error("Error updating user data:", error)
     }
+    setIsEditing(false)
   }
 
-  // Mostrar esqueleto mientras se carga la página o los datos
-  if (!mounted || auth0Loading || (!gyCodingUser && auth0User)) {
-    return <ProfileSkeleton />
-  }
-
-  if (auth0Error) {
-    return <div>Error: {auth0Error.message}</div>
-  }
-
-  if (!auth0User) {
+  if (auth0Loading || gyUserLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <a
-          href="/api/auth/login"
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          Login to GyCoding
-        </a>
+      <div className="min-h-screen bg-background">
+        <ProfileSkeleton />
       </div>
     )
   }
 
-  if (error) {
-    return <div>Error: {error}</div>
+  if (!gyUser) {
+    return (
+      <div className="min-h-screen bg-background">
+        <p className={`${lexendFont.className} text-lg`}>No user data available</p>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background ${lexendFont.className}`}>
       {/* Header con logo */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4">
@@ -122,7 +85,7 @@ export function UserDashboard() {
                 height={32}
                 priority
               />
-              <h1 className={`${valorantFont.className} text-xl font-bold`}>Gy Accounts</h1>
+              <h1 className={`${valorantFont.className} text-xl font-bold`}>Gy ACCOUNTS</h1>
             </div>
             <ThemeSwitch />
           </div>
@@ -136,8 +99,8 @@ export function UserDashboard() {
             <div className="absolute -bottom-16 left-8">
               <div className="relative h-32 w-32 rounded-full border-4 border-background overflow-hidden">
                 <Image
-                  src={isEditing ? editData.picture : (gyCodingUser?.picture || DEFAULT_AVATAR)}
-                  alt={gyCodingUser?.username || "Profile"}
+                  src={isEditing ? editData.picture : (gyUser.picture || DEFAULT_AVATAR)}
+                  alt={gyUser.username}
                   fill
                   sizes="(max-width: 128px) 100vw, 128px"
                   priority
@@ -157,12 +120,12 @@ export function UserDashboard() {
                     type="text"
                     value={editData.username}
                     onChange={(e) => setEditData({ ...editData, username: e.target.value })}
-                    className="text-3xl font-bold bg-transparent border-b border-primary focus:outline-none focus:border-primary/90"
+                    className={`${lexendFont.className} text-3xl font-bold bg-transparent border-b border-primary focus:outline-none focus:border-primary/90 w-full`}
                     placeholder="Enter username"
                   />
                 ) : (
                   <h1 className={`${lexendFont.className} text-3xl font-bold text-foreground`}>
-                    {gyCodingUser?.username || "Username not set"}
+                    {gyUser.username}
                   </h1>
                 )}
               </div>
@@ -171,7 +134,7 @@ export function UserDashboard() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Mail className="h-4 w-4" />
-                  <span>{gyCodingUser?.email}</span>
+                  <span className={lexendFont.className}>{gyUser.email}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Phone className="h-4 w-4" />
@@ -180,20 +143,20 @@ export function UserDashboard() {
                       type="tel"
                       value={editData.phoneNumber || ""}
                       onChange={(e) => setEditData({ ...editData, phoneNumber: e.target.value || null })}
-                      className="bg-transparent border-b border-primary focus:outline-none focus:border-primary/90"
+                      className={`${lexendFont.className} bg-transparent border-b border-primary focus:outline-none focus:border-primary/90 w-full`}
                       placeholder="Enter phone number"
                     />
                   ) : (
-                    <span>{gyCodingUser?.phoneNumber || "No phone number"}</span>
+                    <span className={lexendFont.className}>{gyUser.phoneNumber || "No phone number"}</span>
                   )}
                 </div>
               </div>
 
               {/* Roles */}
               <div>
-                <h2 className="text-lg font-semibold mb-2 text-foreground">Roles</h2>
+                <h2 className={`${lexendFont.className} text-lg font-semibold mb-2 text-foreground`}>Roles</h2>
                 <div className="flex flex-wrap gap-2">
-                  {gyCodingUser?.roles.map((role) => (
+                  {gyUser.roles?.map((role) => (
                     <RoleChip key={role} role={role} />
                   ))}
                 </div>
