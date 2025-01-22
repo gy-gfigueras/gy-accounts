@@ -5,7 +5,7 @@ export async function PUT(req: NextRequest) {
   try {
     const session = await getSession();
     const body = await req.json();
-    const { username, email, picture, number } = body;
+    const { username, picture } = body;
     console.log("Body:", body);
     if (!session || !session.user) {
       return NextResponse.json(
@@ -29,8 +29,8 @@ export async function PUT(req: NextRequest) {
          "Content-Type": "application/json",
        },
        body: JSON.stringify({
-         username: session.user.name,
-         picture: session.user.picture,
+         username: username,
+         picture: picture,
        }),
      });
 
@@ -42,10 +42,11 @@ export async function PUT(req: NextRequest) {
      const gyCodingData = await gyCodingResponse.json();
 
     return NextResponse.json({
-       gyCodingUser: gyCodingData,
+       gyCodingData,
+      status: 200,
     });
   } catch (error) {
-    console.error("Error in /api/auth/use/updater:", error);
+    console.error("Error in /api/auth/update:", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }

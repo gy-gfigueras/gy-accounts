@@ -1,4 +1,4 @@
-import { User } from "../types/user"
+import { User, UserUpdateData } from "../types/user"
 
 export async function getUser(): Promise<User> {
   try {
@@ -17,26 +17,23 @@ export async function getUser(): Promise<User> {
   }
 }
 
-export async function updateUser(data: User) {
-  const mockData: User = {
-    username: "Guille",
-    email: data.email,
-    picture: data.picture,
-    roles: data.roles,
-    phoneNumber: '695624408'
-  }
+export async function updateUser(data: UserUpdateData) {
   try {
     const response = await fetch('/api/auth/update', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(mockData)
+      body: JSON.stringify(data)
     })
 
     if (!response.ok) {
       throw new Error('Failed to update user data')
     }
+
+    const updatedUser = await response.json()
+    console.log('Updated user data:', updatedUser)
+    return updatedUser.gyCodingData
   } catch (error) {
     console.error('Error updating user data:', error)
     throw error

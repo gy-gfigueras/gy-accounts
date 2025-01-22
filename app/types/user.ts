@@ -10,7 +10,5 @@ export interface User {
 
 export interface UserUpdateData {
   username: string
-  email: string
   picture: string
-  phoneNumber: string | null
 }

@@ -12,26 +12,23 @@ import { RoleChip } from "./role-chip"
 import { Phone, Mail } from "lucide-react"
 import { useGycodingUser } from "../hooks/useGycodingUser"
 import { updateUser } from "../service/user"
+import { Spinner } from "./spinner"
 
 const DEFAULT_AVATAR = "/default-avatar.png"
 
 export function UserDashboard() {
   const { user, isLoading: auth0Loading } = useUser()
-  const { data: gyUser, isLoading: gyUserLoading, error: userError } = useGycodingUser()
+  const { data: gyUser, isLoading: gyUserLoading, error: userError, update, isLoadingUpdate } = useGycodingUser()
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState<UserUpdateData>({
-    username: "",
-    email: "",
-    picture: "",
-    phoneNumber: null
+    username: gyUser?.username || "",
+    picture: gyUser?.picture || "",
   })
 
   const handleEditClick = () => {
     setEditData({
       username: gyUser?.username || "",
-      email: gyUser?.email || "",
       picture: gyUser?.picture || "",
-      phoneNumber: gyUser?.phoneNumber || null
     })
     setIsEditing(true)
   }
@@ -40,15 +37,13 @@ export function UserDashboard() {
     setIsEditing(false)
     setEditData({
       username: "",
-      email: "",
       picture: "",
-      phoneNumber: null
     })
   }
 
   const handleSaveEdit = async () => {
     try{
-      await updateUser(gyUser as User)
+      await update(editData)
     } catch (error) {
       console.error("Error updating user data:", error)
     }
@@ -93,6 +88,7 @@ export function UserDashboard() {
       </header>
 
       <div className="container mx-auto py-8 px-4">
+        {isLoadingUpdate && <Spinner />}
         <div className="bg-card rounded-lg shadow-lg overflow-hidden">
           {/* Header con foto de perfil y nombre */}
           <div className="relative h-32 bg-gradient-to-r from-primary to-primary/60">
@@ -141,8 +137,8 @@ export function UserDashboard() {
                   {isEditing ? (
                     <input
                       type="tel"
-                      value={editData.phoneNumber || ""}
-                      onChange={(e) => setEditData({ ...editData, phoneNumber: e.target.value || null })}
+                      // value={editData.phoneNumber || ""}
+                      // onChange={(e) => setEditData({ ...editData, phoneNumber: e.target.value || null })}
                       className={`${lexendFont.className} bg-transparent border-b border-primary focus:outline-none focus:border-primary/90 w-full`}
                       placeholder="Enter phone number"
                     />
