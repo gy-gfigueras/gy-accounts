@@ -1,13 +1,27 @@
- name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
- on:
-   push:
-     branches:
-       - master
+on:
+  push:
+    branches:
+      - master # Cambia esto a la rama desde la que deseas desplegar
 
- jobs:
-   deploy:
-      uses: GY-CODING/.github/.github/workflows/next-deploy.yml@master
-      secrets: inherit
-      with:
-        domain: "accounts.gycoding.com"
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        run: |
+          npm install -g gh-pages
+          npm run deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
