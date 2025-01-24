@@ -54,3 +54,7 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
+
+export async function generateStaticParams() {
+  return [];
+}

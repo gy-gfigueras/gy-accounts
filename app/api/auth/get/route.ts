@@ -38,3 +38,7 @@ export const GET = withApiAuthRequired(async (req: NextRequest) => {
     );
   }
 });
+
+export async function generateStaticParams() {
+  return [];
+}
