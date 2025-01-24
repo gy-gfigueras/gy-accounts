@@ -5,7 +5,7 @@ export async function PUT(req: NextRequest) {
   try {
     const session = await getSession();
     const body = await req.json();
-    const { username, picture } = body;
+    const { username, picture, phoneNumber } = body;
     console.log("Body:", body);
     if (!session || !session.user) {
       return NextResponse.json(
@@ -22,27 +22,28 @@ export async function PUT(req: NextRequest) {
     const baseUrl = process.env.GY_API.replace(/['"]/g, "");
     const apiUrl = `${baseUrl}/accounts/user/profile`;
 
-     const gyCodingResponse = await fetch(apiUrl, {
-       method: "PUT",
-       headers: {
-         Authorization: `${accessToken}`,
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify({
-         username: username,
-         picture: picture,
-       }),
-     });
+    const gyCodingResponse = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: `${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        picture: picture,
+        phoneNumber: phoneNumber,
+      }),
+    });
 
-     if (!gyCodingResponse.ok) {
-       const errorText = await gyCodingResponse.text();
-       throw new Error(`GyCoding API Error: ${errorText}`);
-     }
+    if (!gyCodingResponse.ok) {
+      const errorText = await gyCodingResponse.text();
+      throw new Error(`GyCoding API Error: ${errorText}`);
+    }
 
-     const gyCodingData = await gyCodingResponse.json();
+    const gyCodingData = await gyCodingResponse.json();
 
     return NextResponse.json({
-       gyCodingData,
+      gyCodingData,
       status: 200,
     });
   } catch (error) {

@@ -13,22 +13,24 @@ import { Phone, Mail } from "lucide-react"
 import { useGycodingUser } from "../hooks/useGycodingUser"
 import { updateUser } from "../service/user"
 import { Spinner } from "./spinner"
-
-const DEFAULT_AVATAR = "/default-avatar.png"
+import { toBase64 } from "../utils/global"
 
 export function UserDashboard() {
   const { user, isLoading: auth0Loading } = useUser()
   const { data: gyUser, isLoading: gyUserLoading, error: userError, update, isLoadingUpdate } = useGycodingUser()
   const [isEditing, setIsEditing] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [editData, setEditData] = useState<UserUpdateData>({
     username: gyUser?.username || "",
     picture: gyUser?.picture || "",
+    phoneNumber: gyUser?.phoneNumber || null
   })
 
   const handleEditClick = () => {
     setEditData({
       username: gyUser?.username || "",
       picture: gyUser?.picture || "",
+      phoneNumber: gyUser?.phoneNumber || null
     })
     setIsEditing(true)
   }
@@ -38,17 +40,39 @@ export function UserDashboard() {
     setEditData({
       username: "",
       picture: "",
+      phoneNumber: null
     })
   }
 
   const handleSaveEdit = async () => {
     try{
+      let base64Image = null
+      if (imageFile) {
+        base64Image = await toBase64(imageFile)
+      }
+      editData.picture = base64Image || ""
       await update(editData)
     } catch (error) {
       console.error("Error updating user data:", error)
     }
     setIsEditing(false)
   }
+  
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImageFile(file);
+  
+      // Convertir la imagen seleccionada a Base64 y actualizar editData.picture
+      const base64Image = await toBase64(file);
+      setEditData((prev) => ({
+        ...prev,
+        picture: base64Image, // Refleja la imagen seleccionada en la vista
+      }));
+    }
+  };
+  
 
   if (auth0Loading || gyUserLoading) {
     return (
@@ -93,16 +117,30 @@ export function UserDashboard() {
           {/* Header con foto de perfil y nombre */}
           <div className="relative h-32 bg-gradient-to-r from-primary to-primary/60">
             <div className="absolute -bottom-16 left-8">
-              <div className="relative h-32 w-32 rounded-full border-4 border-background overflow-hidden">
-                <Image
-                  src={isEditing ? editData.picture : (gyUser.picture || DEFAULT_AVATAR)}
-                  alt={gyUser.username}
-                  fill
-                  sizes="(max-width: 128px) 100vw, 128px"
-                  priority
-                  className="object-cover"
-                />
-              </div>
+            <div className="relative h-32 w-32 rounded-full border-4 border-background overflow-hidden">
+            <Image
+              src={editData.picture || gyUser?.picture }    
+              alt="Profile Picture"
+              fill
+              sizes="(max-width: 128px) 100vw, 128px"
+              priority
+              className="object-cover"
+            />
+
+              {isEditing && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                  <label className="cursor-pointer text-white text-sm">
+                    Change
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              )}
+            </div>
             </div>
           </div>
 
@@ -137,8 +175,8 @@ export function UserDashboard() {
                   {isEditing ? (
                     <input
                       type="tel"
-                      // value={editData.phoneNumber || ""}
-                      // onChange={(e) => setEditData({ ...editData, phoneNumber: e.target.value || null })}
+                      value={editData.phoneNumber || ""}
+                      onChange={(e) => setEditData({ ...editData, phoneNumber: e.target.value || null })}
                       className={`${lexendFont.className} bg-transparent border-b border-primary focus:outline-none focus:border-primary/90 w-full`}
                       placeholder="Enter phone number"
                     />
