@@ -35,20 +35,6 @@ const nextConfig = {
       },
     ],
   },
-  exportPathMap: async function (
-    defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
-  ) {
-    // Excluir rutas de API de la exportación estática
-    const pathMap = {
-      ...defaultPathMap,
-      // Excluir rutas de API
-      "/api/auth/[auth0]": { page: "/api/auth/[auth0]" },
-      "/api/auth/get": { page: "/api/auth/get" },
-      "/api/auth/update": { page: "/api/auth/update" },
-    };
-    return pathMap;
-  },
 };
 
 module.exports = nextConfig;
