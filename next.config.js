@@ -13,24 +13,28 @@ const nextConfig = {
   experimental: {
     // Desactivar warnings de cookies en rutas de API
     serverActions: {
-      bodySizeLimit: '2mb',
-      allowedOrigins: ['localhost:3000'],
-      allowedHeaders: ['content-type', 'authorization'],
-      allowedMethods: ['GET', 'POST'],
+      bodySizeLimit: "2mb",
+      allowedOrigins: ["localhost:3000"],
+      allowedHeaders: ["content-type", "authorization"],
+      allowedMethods: ["GET", "POST"],
     },
   },
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
       },
       {
-        protocol: 'https',
-        hostname: 's.gravatar.com',
+        protocol: "https",
+        hostname: "s.gravatar.com",
+      },
+      {
+        protocol: "https",
+        hostname: "api.gycoding.com",
       },
     ],
-  }
-}
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

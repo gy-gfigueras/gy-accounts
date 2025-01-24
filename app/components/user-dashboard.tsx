@@ -45,7 +45,7 @@ export function UserDashboard() {
   }
 
   const handleSaveEdit = async () => {
-    try{
+    try {
       let base64Image = null
       if (imageFile) {
         base64Image = await toBase64(imageFile)
@@ -57,13 +57,13 @@ export function UserDashboard() {
     }
     setIsEditing(false)
   }
-  
+
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImageFile(file);
-  
+
       // Convertir la imagen seleccionada a Base64 y actualizar editData.picture
       const base64Image = await toBase64(file);
       setEditData((prev) => ({
@@ -72,7 +72,7 @@ export function UserDashboard() {
       }));
     }
   };
-  
+
 
   if (auth0Loading || gyUserLoading) {
     return (
@@ -117,30 +117,30 @@ export function UserDashboard() {
           {/* Header con foto de perfil y nombre */}
           <div className="relative h-32 bg-gradient-to-r from-primary to-primary/60">
             <div className="absolute -bottom-16 left-8">
-            <div className="relative h-32 w-32 rounded-full border-4 border-background overflow-hidden">
-            <Image
-              src={editData.picture || gyUser?.picture }    
-              alt="Profile Picture"
-              fill
-              sizes="(max-width: 128px) 100vw, 128px"
-              priority
-              className="object-cover"
-            />
+              <div className="relative h-32 w-32 rounded-full border-4 border-background overflow-hidden">
+                <Image
+                  src={editData.picture || gyUser?.picture}
+                  alt="Profile Picture"
+                  fill
+                  sizes="(max-width: 128px) 100vw, 128px"
+                  priority
+                  className="object-cover"
+                />
 
-              {isEditing && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                  <label className="cursor-pointer text-white text-sm">
-                    Change
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-              )}
-            </div>
+                {isEditing && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                    <label className="cursor-pointer text-white text-sm">
+                      Change
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -168,7 +168,7 @@ export function UserDashboard() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Mail className="h-4 w-4" />
-                  <span className={lexendFont.className}>{gyUser.email}</span>
+                  <span className={lexendFont.className}>{user?.email}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Phone className="h-4 w-4" />
