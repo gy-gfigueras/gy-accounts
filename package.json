@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "next build && mkdir -p out && echo accounts.gycoding.com > ./out/CNAME && gh-pages -d out"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
@@ -34,7 +35,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "22.10.10",
-    "typescript": "5.7.3",
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^5.0.0",
+    "typescript": "5.7.3"
   }
 }
