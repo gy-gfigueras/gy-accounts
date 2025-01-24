@@ -1,0 +1,9 @@
+// filepath: /Users/gfigueras/projects/gycoding/gy-accounts/netlify.toml
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
