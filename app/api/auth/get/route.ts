@@ -1,6 +1,8 @@
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "error";
+
 export const GET = withApiAuthRequired(async (req: NextRequest) => {
   try {
     const session = await getSession(req);
