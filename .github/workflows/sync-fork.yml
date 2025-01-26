@@ -17,7 +17,7 @@ jobs:
       # Step 2: Configurar el remoto upstream
       - name: Add Upstream
         run: |
-          git remote add upstream https://github.com/GYCODING/gy-accounts.git
+          git remote add upstream https://github.com/GY-CODING/gy-accounts.git
           git fetch upstream
 
       # Step 3: Sincronizar cambios de la rama principal
