@@ -1,20 +1,6 @@
-/** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
 module.exports = {
-  darkMode: ["class"],
-  content: [
-    './pages/**/*.{js,jsx,ts,tsx}',
-    './components/**/*.{js,jsx,ts,tsx}',
-    './app/**/*.{js,jsx,ts,tsx}',
-    './src/**/*.{js,jsx,ts,tsx}',
-  ],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -72,5 +58,22 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: "class",
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".animate-accordion-down": {
+          animation: "accordion-down 0.2s ease-out",
+        },
+        ".animate-accordion-up": {
+          animation: "accordion-up 0.2s ease-out",
+        },
+      });
+    }),
+  ],
+};

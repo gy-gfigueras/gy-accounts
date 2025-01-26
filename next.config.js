@@ -4,6 +4,7 @@ const nextConfig = {
     // Ignorar warnings específicos
     ignoreBuildErrors: true,
   },
+  reactStrictMode: true,
   // Silenciar warnings específicos
   onDemandEntries: {
     // Silenciar warnings de cookies
