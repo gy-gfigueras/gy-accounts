@@ -71,6 +71,7 @@ export function UserDashboard() {
         picture: base64Image, // Refleja la imagen seleccionada en la vista
       }));
     }
+    console.log(editData.picture)
   };
 
 
