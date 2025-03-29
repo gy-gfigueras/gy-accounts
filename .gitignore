@@ -1,4 +1,4 @@
-# Compiled class file
+Compiled class file
 *.class
 
 # Log file
@@ -243,3 +243,7 @@ lint/tmp/
 *.hprof
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Java,Swift,react,Kotlin,Android
+node_modules/
+.next/
+.env.local
+.env

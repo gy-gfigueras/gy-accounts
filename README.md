@@ -20,8 +20,8 @@ Description of the technologies and procedures used to develop this project.
 
 ## Creators
 
-| Product Owner | Collaborators
-| :---: | :---: |
+|                                                                            Product Owner                                                                             |                                                                            Collaborators                                                                             |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/ghost.png?size=115" width=115> <br> [![ghost1](https://img.shields.io/badge/ghost-black?style=for-the-badge)](https://github.com/ghost) | <img src="https://github.com/ghost.png?size=115" width=115> <br> [![ghost2](https://img.shields.io/badge/ghost-black?style=for-the-badge)](https://github.com/ghost) |
 
 <br>
