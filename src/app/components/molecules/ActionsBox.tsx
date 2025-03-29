@@ -1,6 +1,5 @@
 import { lexendFont } from '@/utils/fonts';
 import { Box, Button } from '@mui/material';
-import Link from 'next/link';
 import React from 'react';
 
 interface ActionsBoxProps {
@@ -61,7 +60,7 @@ export default function ActionsBox({
           Edit Profile
         </Button>
       )}
-      <Link href="/api/auth/logout" style={{ textDecoration: 'none' }}>
+      <a href="/api/auth/logout" style={{ textDecoration: 'none' }}>
         <Button
           variant="outlined"
           color="error"
@@ -69,7 +68,7 @@ export default function ActionsBox({
         >
           Logout
         </Button>
-      </Link>
+      </a>
     </Box>
   );
 }
