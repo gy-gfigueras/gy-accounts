@@ -3,6 +3,15 @@ import { ThemeProviderComponent } from './components/organisms/ThemeContext';
 import Header from './components/organisms/Header';
 import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'GY Accounts - Dashboard',
+  description: 'Manage your GYCoding account settings and preferences',
+  icons: {
+    icon: '/gycoding-ico.ico',
+  },
+};
 
 export default function RootLayout({
   children,
