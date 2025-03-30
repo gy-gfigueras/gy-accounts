@@ -31,7 +31,7 @@ export default function UserData({
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'start',
-        gap: '1rem',
+        gap: ['.5rem', '1rem'],
       }}
     >
       {isEditing ? (
@@ -101,8 +101,8 @@ export default function UserData({
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'row-reverse',
-          gap: '1rem',
+          flexDirection: ['column', 'row-reverse'],
+          gap: ['.5rem', '1rem'],
           alignItems: 'center',
           justifyContent: 'start',
           width: '100%',

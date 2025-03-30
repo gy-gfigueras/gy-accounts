@@ -16,6 +16,7 @@ export function RoleChip({ role }: RoleChipProps) {
       label={role}
       color="primary"
       variant="outlined"
+      size="small"
       sx={{
         marginBottom: '8px',
         marginRight: '8px',

@@ -116,7 +116,7 @@ function Home() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'start',
-        paddingTop: '5%',
+        paddingTop: ['18%', '10%', '5%'],
       }}
     >
       <Box
@@ -142,7 +142,7 @@ function Home() {
             isEditing={isEditing}
             handleImageChange={handleImageChange}
           />
-          <CardContent sx={{ pt: '80px', pb: '10px' }}>
+          <CardContent sx={{ pt: ['50px', '80px'], pb: '10px' }}>
             <UserData
               user={user}
               gyUser={gyUser}
