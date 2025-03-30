@@ -23,6 +23,7 @@
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "@next/font": "^14.2.15",
+    "ci": "^2.3.0",
     "eslint-config-prettier": "^10.1.1",
     "framer-motion": "^12.5.0",
     "google": "^2.1.0",
