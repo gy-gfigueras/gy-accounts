@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   tools {
-    nodejs 'Node 18' // asegúrate de tener esta versión instalada en Jenkins
+    nodejs 'Node 18.19.0' // Usa exactamente el nombre que aparece en Global Tool Configuration
   }
 
   stages {
