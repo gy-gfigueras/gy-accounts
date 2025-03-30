@@ -10,13 +10,6 @@ export async function getUser(): Promise<User> {
 
     const data = await response.json();
     const user: User = data.gyCodingUser;
-    //  const user: User = {
-    //   username: 'GFIGUERAS',
-    //   email: 'gfigueras@gycoding.com',
-    //   picture: '/GYLOGO-V7.png',
-    //   roles: [ERole.DEVELOPER, ERole.ADMIN, ERole.COMMON],
-    //   phoneNumber: '+34 695624408',
-    // };
     return user;
   } catch (error) {
     console.error('Error fetching user data:', error);
