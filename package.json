@@ -9,7 +9,8 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "deploy:staging": "vercel --prebuilt --yes --name accounts.sta.gycoding.com"
   },
   "release": {
     "branches": [
