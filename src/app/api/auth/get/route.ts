@@ -8,27 +8,57 @@ import { User } from '@/domain/user';
 export const GET = withApiAuthRequired(async () => {
   try {
     const session = await getSession();
+    const userId = session?.user.sub;
+    const accessToken = session?.accessToken;
 
     if (session) {
-      await sendLog(ELevel.INFO, ELogs.SESSION_RECIVED, {
-        user: session.user.sub,
-      });
+      await sendLog(ELevel.INFO, ELogs.SESSION_RECIVED, { user: userId });
     }
 
-    if (!process.env.GY_API) {
-      throw new Error(ELogs.ENVIROMENT_VARIABLE_NOT_DEFINED);
+    // Configuración base
+    let apiUrl: string | null = null;
+    let headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    const env = process.env.GY_ENVIRONMENT;
+
+    if (env === 'STAGING') {
+      const baseUrl = process.env.GY_API_STAGING?.replace(/['"]/g, '');
+      const apiKey = process.env.GY_API_KEY;
+
+      if (!baseUrl || !apiKey) {
+        throw new Error(ELogs.ENVIROMENT_VARIABLE_NOT_DEFINED);
+      }
+
+      apiUrl = `${baseUrl}/user/profile`;
+      headers = {
+        ...headers,
+        'x-user-id': userId!,
+        'x-api-key': apiKey,
+      };
     }
 
-    const accessToken = session?.accessToken;
-    const baseUrl = process.env.GY_API.replace(/['"]/g, '');
-    const apiUrl = `${baseUrl}/accounts/user/profile`;
+    if (env === 'PRODUCTION') {
+      const baseUrl = process.env.GY_API?.replace(/['"]/g, '');
 
-    const gyCodingResponse = await fetch(apiUrl, {
-      headers: {
+      if (!baseUrl || !accessToken) {
+        throw new Error(ELogs.ENVIROMENT_VARIABLE_NOT_DEFINED);
+      }
+
+      apiUrl = `${baseUrl}/accounts/user/profile`;
+      headers = {
+        ...headers,
         Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
+      };
+    }
+
+    if (!apiUrl) {
+      throw new Error('API URL not defined');
+    }
+
+    // Llamada unificada
+    const gyCodingResponse = await fetch(apiUrl, { headers });
 
     if (!gyCodingResponse.ok) {
       const errorText = await gyCodingResponse.text();
@@ -39,6 +69,7 @@ export const GET = withApiAuthRequired(async () => {
     }
 
     const gyCodingData = await gyCodingResponse.json();
+
     await sendLog(ELevel.INFO, ELogs.PROFILE_HAS_BEEN_RECEIVED, {
       user: gyCodingData.username,
       status: gyCodingResponse.status,
@@ -49,7 +80,6 @@ export const GET = withApiAuthRequired(async () => {
     });
   } catch (error) {
     console.error('Error in /api/auth/user:', error);
-
     await sendLog(ELevel.ERROR, ELogs.PROFILE_COULD_NOT_BE_RECEIVED, {
       error: error,
     });
@@ -60,7 +90,3 @@ export const GET = withApiAuthRequired(async () => {
     );
   }
 });
-
-export async function generateStaticParams() {
-  return [];
-}
