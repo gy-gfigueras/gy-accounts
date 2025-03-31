@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "prepare": "husky install",
     "release": "semantic-release",
-    "deploy:staging": "vercel --prebuilt --yes --name accounts.sta.gycoding.com"
+    "deploy:staging": "vercel --yes && vercel alias https://gy-accounts-git-develop-gy-codings-projects.vercel.app accounts.sta.gycoding.com"
   },
   "release": {
     "branches": [
