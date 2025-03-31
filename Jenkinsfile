@@ -1,22 +1,30 @@
 pipeline {
   agent any
 
-  tools {
-    nodejs 'Node 18.19.0' // Usa exactamente el nombre que aparece en Global Tool Configuration
+  environment {
+      GITHUB_TOKEN = credentials('GITHUB_TOKEN')
   }
-
+  
   stages {
-    stage('Install') {
+    stage('Check SCM branch') {
+        steps {
+            git branch: 'main', url: 'https://github.com/GY-CODING/gy-accounts.git'
+        }
+    }
+    
+    stage('Install Dependencies') {
       steps {
         sh 'npm install'
       }
     }
-    stage('Lint') {
+
+    stage('Run Linter') {
       steps {
         sh 'npm run lint'
       }
     }
-    stage('Build') {
+
+    stage('Build Project') {
       steps {
         sh 'npm run build'
       }
