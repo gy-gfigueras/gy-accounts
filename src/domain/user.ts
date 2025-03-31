@@ -4,7 +4,7 @@ export interface User {
   username: string;
   email?: string;
   picture: string;
-  apikey: string;
+  apiKey: string;
   roles: ERole[];
   phoneNumber: string | null;
 }

@@ -34,7 +34,7 @@ export default function CardHeader({
             gyUser?.picture ||
             '/default.png'
           }
-          alt="Profile Picture"
+          alt={editData.username || gyUser?.username}
           sx={{
             width: '128px',
             height: '128px',

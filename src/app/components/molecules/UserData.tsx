@@ -7,6 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { EditData, User } from '@/domain/user';
 import { UserProfile } from '@auth0/nextjs-auth0/client';
+import TextFieldCopyTemplate from '../atoms/textfieldCopyPaste';
 
 interface UserDataProps {
   user: UserProfile | undefined;
@@ -190,6 +191,20 @@ export default function UserData({
               ),
             },
           }}
+        />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          width: ['auto', 'auto'],
+        }}
+      >
+        <TextFieldCopyTemplate
+          label="API KEY"
+          disabled
+          value={gyUser!.apiKey}
         />
       </Box>
     </Box>
