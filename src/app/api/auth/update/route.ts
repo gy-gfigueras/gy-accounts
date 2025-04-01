@@ -28,7 +28,7 @@ export async function PUT(req: NextRequest) {
     const accessToken = session.accessToken;
     const baseUrl = process.env.GY_API.replace(/['"]/g, '');
     const apiUrl = `${baseUrl}/accounts/user/profile`;
-
+    console.log({ username, picture, phoneNumber });
     const gyCodingResponse = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
@@ -44,6 +44,8 @@ export async function PUT(req: NextRequest) {
 
     if (!gyCodingResponse.ok) {
       const errorText = await gyCodingResponse.text();
+
+      console.log(gyCodingResponse);
       await sendLog(ELevel.ERROR, ELogs.PROFILE_UPDATE_FAILED, {
         error: errorText,
       });

@@ -31,6 +31,8 @@ export default function TextFieldCopyTemplate({
       variant="outlined"
       sx={{
         mb: '8px',
+        width: ['100%', '100%', '570px'],
+        pointerEvents: 'none',
       }}
       slotProps={{
         htmlInput: {
@@ -39,6 +41,8 @@ export default function TextFieldCopyTemplate({
             whiteSpace: !hidden ? 'nowrap' : 'pre-wrap',
             overflow: !hidden ? 'hidden' : 'auto',
             textOverflow: !hidden ? 'ellipsis' : 'unset',
+            width: '100%',
+            pointerEvents: 'none',
           },
         },
         input: {
