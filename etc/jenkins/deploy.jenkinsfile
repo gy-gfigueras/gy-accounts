@@ -1,15 +1,46 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    GITHUB_TOKEN = credentials('GITHUB_TOKEN')
-  }
-  
-  stages {
-    stage('Test (delete this)') {
-      steps {
-        git branch: 'main', url: 'https://github.com/GY-CODING/gy-accounts.git'
-      }
+    environment {
+        GITHUB_USER = 'gy-toxyc'
+        GITHUB_TOKEN = credentials('FRONT_GITHUB_TOKEN')
+        MAIN_REPO = 'GY-CODING/gy-accounts'
+        FORK_REPO = "${GITHUB_USER}/gy-accounts"
+        KOYEB_DEPLOY_URL = credentials('ACCOUNTS_KOYEB_DEPLOY_URL')
     }
-  }
+
+    stages {
+        stage('Sync Fork') {
+            steps {
+                script {
+                    sh '''
+                    git config --global user.name "$GITHUB_USER"
+                    git config --global user.email "tu-email@example.com"
+                    
+                    git clone https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$FORK_REPO.git
+                    cd api-docs
+                    git remote add upstream https://github.com/$MAIN_REPO.git || true
+                    git fetch upstream
+                    git checkout main
+                    git merge upstream/main --allow-unrelated-histories
+                    git push origin main
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Vercel') {
+            steps {
+                script {
+                    sh "curl -X GET $KOYEB_DEPLOY_URL"
+                }
+            }
+        }
+
+        stage('Create Release') {
+          steps {
+            sh 'npm run release'
+          }
+        }
+    }
 }
