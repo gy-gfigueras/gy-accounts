@@ -60,10 +60,16 @@ pipeline {
 
         stage('Create Release') {
             steps {
-                sh '''
-                export PATH="/root/.nvm/versions/node/v20.8.1/bin:$PATH"
-                npx npm install && npx npm run release
-                '''
+                script {
+                    def WORKFLOW_FILE = "release.yml"
+
+                    sh """
+                    curl -X POST https://api.github.com/repos/$MAIN_REPO/actions/workflows/$WORKFLOW_FILE/dispatches \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        -H "Authorization: token $GITHUB_TOKEN" \
+                        -d '{ "ref": "main" }'
+                    """
+                }
             }
         }
     }
