@@ -59,9 +59,12 @@ pipeline {
         }
 
         stage('Create Release') {
-          steps {
-            sh 'npm install && npm run release'
-          }
+            steps {
+                sh '''
+                export PATH=$PATH:/usr/local/bin
+                npm install && npm run release
+                '''
+            }
         }
     }
 }
