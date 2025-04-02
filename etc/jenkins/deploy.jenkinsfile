@@ -61,7 +61,7 @@ pipeline {
         stage('Create Release') {
             steps {
                 sh '''
-                export PATH=$PATH:/usr/local/bin
+                export PATH="/root/.nvm/versions/node/v20.8.1/bin:$PATH"
                 npm install && npm run release
                 '''
             }
