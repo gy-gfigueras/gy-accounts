@@ -60,7 +60,7 @@ pipeline {
 
         stage('Create Release') {
           steps {
-            sh 'npm run release'
+            sh 'npm install && npm run release'
           }
         }
     }
