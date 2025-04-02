@@ -62,7 +62,7 @@ pipeline {
             steps {
                 sh '''
                 export PATH="/root/.nvm/versions/node/v20.8.1/bin:$PATH"
-                node /root/.nvm/versions/node/v20.8.1/bin/npm install && node /root/.nvm/versions/node/v20.8.1/bin/npm run release
+                npx npm install && npx npm run release
                 '''
             }
         }
