@@ -15,7 +15,7 @@ pipeline {
                 script {
                     sh '''
                     git config --global user.name "$GITHUB_USER"
-                    git config --global user.email "tu-email@example.com"
+                    git config --global user.email "gfiigueras05@gmail.com"
                     
                     git clone https://$GITHUB_USER:$GITHUB_TOKEN@github.com/$FORK_REPO.git
                     cd api-docs
