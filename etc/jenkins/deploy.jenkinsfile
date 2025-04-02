@@ -6,7 +6,7 @@ pipeline {
         GITHUB_TOKEN = credentials('FRONT_GITHUB_TOKEN')
         MAIN_REPO = 'GY-CODING/gy-accounts'
         FORK_REPO = "${GITHUB_USER}/gy-accounts"
-        KOYEB_DEPLOY_URL = credentials('ACCOUNTS_KOYEB_DEPLOY_URL')
+        VERCEL_DEPLOY_URL = credentials('ACCOUNTS_VERCEL_DEPLOY_URL')
     }
 
     stages {
