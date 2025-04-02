@@ -53,7 +53,7 @@ pipeline {
         stage('Deploy to Vercel') {
             steps {
                 script {
-                    sh "curl -X GET $KOYEB_DEPLOY_URL"
+                    sh "curl -X POST $KOYEB_DEPLOY_URL"
                 }
             }
         }
