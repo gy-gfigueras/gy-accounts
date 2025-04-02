@@ -32,7 +32,6 @@ export default function TextFieldCopyTemplate({
       sx={{
         mb: '8px',
         width: ['100%', '100%', '570px'],
-        pointerEvents: 'none',
       }}
       slotProps={{
         htmlInput: {
