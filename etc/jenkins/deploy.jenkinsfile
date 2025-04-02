@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_USER = 'gy-toxyc'
+        GITHUB_USER = 'gy-gfigueras'
         GITHUB_TOKEN = credentials('FRONT_GITHUB_TOKEN')
         MAIN_REPO = 'GY-CODING/gy-accounts'
         FORK_REPO = "${GITHUB_USER}/gy-accounts"
