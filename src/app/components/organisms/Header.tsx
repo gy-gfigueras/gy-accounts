@@ -37,7 +37,7 @@ export default function Header({ title }: HeaderProps): JSX.Element {
       })}
     >
       <Box display="flex" alignItems="center" gap="1rem" height="100%">
-        <Image src="/gycoding.svg" alt="gy-image" width={32} height={32} />
+        <Image src="/gycoding.png" alt="gy-image" width={32} height={32} />
         <Typography
           marginTop={'4px'}
           fontSize="20px"
