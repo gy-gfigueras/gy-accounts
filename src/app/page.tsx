@@ -13,14 +13,21 @@ import ActionsBox from './components/molecules/ActionsBox';
 import CardHeader from './components/molecules/CardHeader';
 import { EditData } from '@/domain/user';
 import { ELogs } from '@/utils/constants/ELogs';
+import AnimatedAlert from './components/atoms/Alert';
+import { ESeverity } from '@/utils/constants/ESeverity';
 
 function Home() {
   const { user } = useUser();
   const {
     data: gyUser,
     isLoading: gyUserLoading,
+    // error: isError,
     update,
     isLoadingUpdate,
+    isErrorUpdate,
+    isUpdated,
+    setIsUpdated,
+    setIsErrorUpdate,
   } = useUserGY();
   const [isEditing, setIsEditing] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -30,6 +37,16 @@ function Home() {
     picture: gyUser?.picture || '',
     phoneNumber: gyUser?.phoneNumber || null,
   });
+
+  const handleOpenErrorAlert = isErrorUpdate;
+  const handleOpenSuccessAlert = isUpdated;
+
+  const handleOpenErrorAlertClose = () => {
+    setIsErrorUpdate(false);
+  };
+  const handleOpenSuccessAlertClose = () => {
+    setIsUpdated(false);
+  };
 
   const handleEditClick = () => {
     setEditData({
@@ -161,6 +178,28 @@ function Home() {
           </CardContent>
         </Card>
       </Box>
+      {/* <AnimatedAlert
+        severity={ESeverity.ERROR}
+        open={isError }
+        duration={5000}
+        message={'An error occurred while fetching user data'}
+        onClose={handleOpenErrorAlertClose}
+      /> */}
+      <AnimatedAlert
+        severity={ESeverity.ERROR}
+        open={handleOpenErrorAlert}
+        duration={5000}
+        message={'Profile could be not updated'}
+        onClose={handleOpenErrorAlertClose}
+      />
+
+      <AnimatedAlert
+        severity={ESeverity.SUCCESS}
+        open={handleOpenSuccessAlert}
+        duration={5000}
+        message={'Profile has been updated'}
+        onClose={handleOpenSuccessAlertClose}
+      />
     </Box>
   );
 }

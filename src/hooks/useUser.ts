@@ -10,10 +10,16 @@ interface useUserProps {
   error: Error | null;
   update: (data: UserUpdateData) => Promise<void>;
   isLoadingUpdate: boolean;
+  isErrorUpdate: boolean;
+  isUpdated: boolean;
+  setIsUpdated: (value: boolean) => void;
+  setIsErrorUpdate: (value: boolean) => void;
 }
 
 export function useUser(): useUserProps {
   const { data, isLoading, error } = useSWR('/api/auth/get', getUser);
+  const [isErrorUpdate, setIsErrorUpdate] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
 
@@ -24,8 +30,12 @@ export function useUser(): useUserProps {
       await mutate('/api/auth/get', async () => await getUser(), {
         revalidate: true,
       });
+      setIsUpdated(true);
+      setIsErrorUpdate(false);
     } catch (err) {
       console.error('Failed to update user:', err);
+      setIsErrorUpdate(true);
+      setIsUpdated(false);
       throw err;
     } finally {
       setIsLoadingUpdate(false);
@@ -38,5 +48,9 @@ export function useUser(): useUserProps {
     error,
     update,
     isLoadingUpdate,
+    isErrorUpdate,
+    setIsErrorUpdate,
+    isUpdated,
+    setIsUpdated,
   };
 }
