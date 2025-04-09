@@ -64,22 +64,12 @@ pipeline {
         stage('Create Release') {
             steps {
                 script {
-                    // Clonamos el repositorio original si no existe
                     sh '''
                     if [ ! -d "$WORKSPACE/gy-accounts-original" ]; then
                         git clone "https://github.com/$MAIN_REPO.git" "$WORKSPACE/gy-accounts-original"
                     fi
                     '''
 
-                    // Nos aseguramos de estar en la rama main
-                    sh '''
-                    cd "$WORKSPACE/gy-accounts-original"
-                    git fetch origin
-                    git checkout main
-                    git pull origin main
-                    '''
-
-                    // Ejecutamos el release
                     sh '''
                     mkdir -p "$NVM_DIR"
                     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -88,7 +78,8 @@ pipeline {
                     nvm install 20
 
                     cd "$WORKSPACE/gy-accounts-original"
-                    
+                    git checkout main
+
                     npm run release
                     '''
                 }
