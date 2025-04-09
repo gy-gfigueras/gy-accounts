@@ -64,22 +64,25 @@ pipeline {
         stage('Create Release') {
             steps {
                 script {
+                    // Clonamos el repositorio original si no existe
                     sh '''
-                        if [ ! -d "$WORKSPACE/gy-accounts-original" ]; then
-                            git clone https://github.com/$MAIN_REPO.git $WORKSPACE/gy-accounts-original
-                        fi
+                    if [ ! -d "$WORKSPACE/gy-accounts-original" ]; then
+                        git clone "https://github.com/$MAIN_REPO.git" "$WORKSPACE/gy-accounts-original"
+                    fi
                     '''
 
+                    // Nos aseguramos de estar en la rama main
                     sh '''
-                        cd $WORKSPACE/gy-accounts-original
-                        git fetch origin
-                        git checkout main
-                        git pull origin main
+                    cd "$WORKSPACE/gy-accounts-original"
+                    git fetch origin
+                    git checkout main
+                    git pull origin main
                     '''
 
+                    // Ejecutamos el release
                     sh '''
-                        cd $WORKSPACE/gy-accounts-original
-                        ./with-node.sh npm run release
+                    cd "$WORKSPACE/gy-accounts-original"
+                    ./with-node.sh npm run release
                     '''
                 }
             }
