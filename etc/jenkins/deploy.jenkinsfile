@@ -88,7 +88,8 @@ pipeline {
                     nvm install 20
 
                     cd "$WORKSPACE/gy-accounts-original"
-                    ./with-node.sh npm run release
+                    
+                    npm run release
                     '''
                 }
             }
