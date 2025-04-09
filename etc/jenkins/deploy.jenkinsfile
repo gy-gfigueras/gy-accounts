@@ -29,6 +29,13 @@ pipeline {
                     echo 'nvm use 20' >> with-node.sh
                     echo '"$@"' >> with-node.sh
                     chmod +x with-node.sh
+
+                    echo '#!/bin/bash' > $WORKSPACE/$WORKSPACE_DIR/with-node.sh
+                    echo 'export NVM_DIR="$WORKSPACE/.nvm"' >> $WORKSPACE/$WORKSPACE_DIR/with-node.sh
+                    echo '[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"' >> $WORKSPACE/$WORKSPACE_DIR/with-node.sh
+                    echo 'nvm use 20' >> $WORKSPACE/$WORKSPACE_DIR/with-node.sh
+                    echo '"$@"' >> $WORKSPACE/$WORKSPACE_DIR/with-node.sh
+                    chmod +x $WORKSPACE/$WORKSPACE_DIR/with-node.sh
                 '''
             }
         }
