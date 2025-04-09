@@ -83,10 +83,13 @@ pipeline {
         stage('Create Release') {
             steps {
                 script {
-                    sh '''
+                    dir(WORKSPACE_DIR) {
+                        // Asegúrate de que estamos en la rama main antes de ejecutar semantic-release
+                        sh '''
                         git checkout main
                         ./with-node.sh npm run release
-                    '''
+                        '''
+                    }
                 }
             }
         }
