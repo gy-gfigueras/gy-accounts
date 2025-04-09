@@ -83,7 +83,10 @@ pipeline {
         stage('Create Release') {
             steps {
                 script {
-                    sh './with-node.sh npm run release'
+                    sh '''
+                        git checkout main
+                        ./with-node.sh npm run release
+                    '''
                 }
             }
         }
