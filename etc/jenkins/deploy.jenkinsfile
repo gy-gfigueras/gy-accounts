@@ -64,22 +64,14 @@ pipeline {
         stage('Create Release') {
             steps {
                 script {
-                    sh '''
-                    mkdir -p "$NVM_DIR"
-                    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-                    export NVM_DIR="$NVM_DIR"
-                    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-                    nvm install 20
+                    def WORKFLOW_FILE = "release.yml"
 
-                    if [ ! -d "$WORKSPACE/gy-accounts-release" ]; then
-                        git clone "https://github.com/$MAIN_REPO.git" "$WORKSPACE/gy-accounts-release"
-                    fi
-
-                    cd "$WORKSPACE/gy-accounts-release"
-                    git checkout main
-
-                    npm run release
-                    '''
+                    sh """
+                    curl -X POST https://api.github.com/repos/$MAIN_REPO/actions/workflows/$WORKFLOW_FILE/dispatches \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        -H "Authorization: token $GITHUB_TOKEN" \
+                        -d '{ "ref": "main" }'
+                    """
                 }
             }
         }
