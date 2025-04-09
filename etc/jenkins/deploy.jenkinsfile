@@ -65,19 +65,17 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    if [ ! -d "$WORKSPACE/gy-accounts-original" ]; then
-                        git clone "https://github.com/$MAIN_REPO.git" "$WORKSPACE/gy-accounts-original"
-                    fi
-                    '''
-
-                    sh '''
                     mkdir -p "$NVM_DIR"
                     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
                     export NVM_DIR="$NVM_DIR"
                     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                     nvm install 20
 
-                    cd "$WORKSPACE/gy-accounts-original"
+                    if [ ! -d "$WORKSPACE/gy-accounts-release" ]; then
+                        git clone "https://github.com/$MAIN_REPO.git" "$WORKSPACE/gy-accounts-release"
+                    fi
+
+                    cd "$WORKSPACE/gy-accounts-release"
                     git checkout main
 
                     npm run release
