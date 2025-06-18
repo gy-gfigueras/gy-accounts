@@ -9,7 +9,7 @@ export const GET = withApiAuthRequired(async () => {
   try {
     const session = await getSession();
     const userId = session?.user.sub;
-    const accessToken = session?.accessToken;
+    const idToken = session?.idToken;
 
     if (session) {
       await sendLog(ELevel.INFO, ELogs.SESSION_RECIVED, { user: userId });
@@ -42,14 +42,14 @@ export const GET = withApiAuthRequired(async () => {
     if (env === 'PRODUCTION') {
       const baseUrl = process.env.GY_API?.replace(/['"]/g, '');
 
-      if (!baseUrl || !accessToken) {
+      if (!baseUrl || !idToken) {
         throw new Error(ELogs.ENVIROMENT_VARIABLE_NOT_DEFINED);
       }
 
       apiUrl = `${baseUrl}/accounts/user/profile`;
       headers = {
         ...headers,
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${idToken}`,
       };
     }
 

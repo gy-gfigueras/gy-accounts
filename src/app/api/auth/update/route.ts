@@ -25,14 +25,14 @@ export async function PUT(req: NextRequest) {
 
     const body = await req.json();
     const { username, picture, phoneNumber } = body;
-    const accessToken = session.accessToken;
+    const idToken = session.idToken;
     const baseUrl = process.env.GY_API.replace(/['"]/g, '');
     const apiUrl = `${baseUrl}/accounts/user/profile`;
     console.log({ username, picture, phoneNumber });
     const gyCodingResponse = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${idToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
