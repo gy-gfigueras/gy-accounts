@@ -3,6 +3,7 @@ import type { User, UserUpdateData } from '../domain/user';
 import { getUser, updateUser } from '../services/user';
 import useSWR, { mutate } from 'swr';
 import { useState } from 'react';
+import { updateApiKey } from '../services/user';
 
 interface useUserProps {
   data: User | undefined;
@@ -14,6 +15,12 @@ interface useUserProps {
   isUpdated: boolean;
   setIsUpdated: (value: boolean) => void;
   setIsErrorUpdate: (value: boolean) => void;
+  refreshApiKey: () => void;
+  isUpdatingAPIKEY: boolean;
+  isErrorUpdateAPIKEY: boolean;
+  isUpdatedAPIKEY: boolean;
+  setIsUpdatedAPIKEY: (value: boolean) => void;
+  setIsErrorUpdateAPIKEY: (value: boolean) => void;
 }
 
 export function useUser(): useUserProps {
@@ -22,6 +29,9 @@ export function useUser(): useUserProps {
   const [isUpdated, setIsUpdated] = useState(false);
 
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [isUpdatingAPIKEY, setIsUpdatingAPIKEY] = useState(false);
+  const [isErrorUpdateAPIKEY, setIsErrorUpdateAPIKEY] = useState(false);
+  const [isUpdatedAPIKEY, setIsUpdatedAPIKEY] = useState(false);
 
   const update = async (updateData: UserUpdateData) => {
     setIsLoadingUpdate(true);
@@ -42,6 +52,25 @@ export function useUser(): useUserProps {
     }
   };
 
+  const refreshApiKey = async () => {
+    setIsUpdatingAPIKEY(true);
+    try {
+      await updateApiKey();
+      await mutate('/api/auth/get', async () => await getUser(), {
+        revalidate: true,
+      });
+      setIsErrorUpdateAPIKEY(false);
+      setIsUpdatedAPIKEY(true);
+    } catch (err) {
+      console.error('Failed to update user:', err);
+      setIsErrorUpdateAPIKEY(true);
+      setIsUpdatedAPIKEY(false);
+      throw err;
+    } finally {
+      setIsUpdatingAPIKEY(false);
+    }
+  };
+
   return {
     data,
     isLoading,
@@ -52,5 +81,11 @@ export function useUser(): useUserProps {
     setIsErrorUpdate,
     isUpdated,
     setIsUpdated,
+    refreshApiKey,
+    isErrorUpdateAPIKEY,
+    isUpdatedAPIKEY,
+    isUpdatingAPIKEY,
+    setIsUpdatedAPIKEY,
+    setIsErrorUpdateAPIKEY,
   };
 }
