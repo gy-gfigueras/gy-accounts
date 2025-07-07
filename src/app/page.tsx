@@ -28,6 +28,12 @@ function Home() {
     isUpdated,
     setIsUpdated,
     setIsErrorUpdate,
+    refreshApiKey,
+    isUpdatingAPIKEY,
+    isUpdatedAPIKEY,
+    isErrorUpdateAPIKEY,
+    setIsUpdatedAPIKEY,
+    setIsErrorUpdateAPIKEY,
   } = useUserGY();
   const [isEditing, setIsEditing] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -40,12 +46,29 @@ function Home() {
 
   const handleOpenErrorAlert = isErrorUpdate;
   const handleOpenSuccessAlert = isUpdated;
+  const handleOpenSuccessAlertRefreshApiKey = isUpdatedAPIKEY;
 
   const handleOpenErrorAlertClose = () => {
     setIsErrorUpdate(false);
   };
   const handleOpenSuccessAlertClose = () => {
     setIsUpdated(false);
+  };
+
+  const handleOpenSuccessAlertRefreshApiKeyClose = () => {
+    setIsUpdatedAPIKEY(false);
+  };
+
+  const handleOpenSuccessAlertRefreshApiKeyErrorClose = () => {
+    setIsErrorUpdateAPIKEY(false);
+  };
+
+  const handleRefreshAPIKey = async () => {
+    try {
+      await refreshApiKey();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleEditClick = () => {
@@ -166,6 +189,8 @@ function Home() {
               isEditing={isEditing}
               setEditData={setEditData}
               editData={editData}
+              updateApiKey={handleRefreshAPIKey}
+              isUpdatingAPIKEY={isUpdatingAPIKEY}
             />
             <RoleBox gyUser={gyUser} />
             <ActionsBox
@@ -199,6 +224,20 @@ function Home() {
         duration={5000}
         message={'Profile has been updated'}
         onClose={handleOpenSuccessAlertClose}
+      />
+      <AnimatedAlert
+        severity={ESeverity.SUCCESS}
+        open={handleOpenSuccessAlertRefreshApiKey}
+        duration={5000}
+        message={'API KEY Has been updated'}
+        onClose={handleOpenSuccessAlertRefreshApiKeyClose}
+      />
+      <AnimatedAlert
+        severity={ESeverity.ERROR}
+        open={isErrorUpdateAPIKEY}
+        duration={5000}
+        message={'API KEY Cannot be updated'}
+        onClose={handleOpenSuccessAlertRefreshApiKeyErrorClose}
       />
     </Box>
   );

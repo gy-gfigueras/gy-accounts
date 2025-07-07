@@ -32,10 +32,30 @@ export async function updateUser(data: UserUpdateData) {
     }
 
     const updatedUser = await response.json();
-    console.log('Updated user data:', updatedUser);
     return updatedUser.gyCodingData;
   } catch (error) {
     console.error('Error updating user data:', error);
+    throw error;
+  }
+}
+
+export async function updateApiKey() {
+  try {
+    const response = await fetch('/api/auth/metadata/apikey', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update API KEY');
+    }
+
+    const updatedApiKey = await response.json();
+    return updatedApiKey;
+  } catch (error) {
+    console.error('Error updating api key:', error);
     throw error;
   }
 }

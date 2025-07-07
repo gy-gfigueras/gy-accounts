@@ -1,5 +1,5 @@
 import { lexendFont } from '@/utils/fonts';
-import { Box, TextField, InputAdornment } from '@mui/material';
+import { Box, TextField, InputAdornment, IconButton } from '@mui/material';
 import React from 'react';
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -9,6 +9,7 @@ import { EditData, User } from '@/domain/user';
 import { UserProfile } from '@auth0/nextjs-auth0/client';
 import TextFieldCopyTemplate from '../atoms/textfieldCopyPaste';
 import { motion } from 'framer-motion';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 interface UserDataProps {
   user: UserProfile | undefined;
@@ -16,6 +17,8 @@ interface UserDataProps {
   isEditing: boolean;
   setEditData: React.Dispatch<React.SetStateAction<EditData>>;
   editData: EditData;
+  updateApiKey: () => void;
+  isUpdatingAPIKEY: boolean;
 }
 
 export default function UserData({
@@ -24,6 +27,8 @@ export default function UserData({
   isEditing,
   setEditData,
   editData,
+  updateApiKey,
+  isUpdatingAPIKEY,
 }: UserDataProps) {
   return (
     <Box
@@ -215,9 +220,11 @@ export default function UserData({
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
             gap: '1rem',
             width: ['auto', 'auto'],
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <TextFieldCopyTemplate
@@ -225,6 +232,25 @@ export default function UserData({
             disabled
             value={gyUser!.apiKey}
           />
+
+          {isEditing && (
+            <IconButton
+              disabled={isUpdatingAPIKEY}
+              onClick={updateApiKey}
+              sx={{
+                width: '48px',
+                height: '48px',
+                marginTop: '-6px',
+              }}
+            >
+              <RefreshIcon
+                sx={{
+                  width: '32px',
+                  height: '32px',
+                }}
+              />
+            </IconButton>
+          )}
         </Box>
       </motion.div>
     </Box>
