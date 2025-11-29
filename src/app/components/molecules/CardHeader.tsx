@@ -1,12 +1,12 @@
-import { EditData, User } from '@/domain/user';
-import { Box, Avatar } from '@mui/material';
+import { UserProfile } from '@gycoding/nebula';
+import { Avatar, Box } from '@mui/material';
 import { motion } from 'framer-motion';
 import React from 'react';
 
 interface CardHeaderProps {
   previewImage: string | null;
-  editData: EditData;
-  gyUser: User;
+  editData: UserProfile;
+  gyUser: UserProfile;
   isEditing: boolean;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

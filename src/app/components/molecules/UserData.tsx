@@ -1,22 +1,22 @@
 import { lexendFont } from '@/utils/fonts';
-import { Box, TextField, InputAdornment, IconButton } from '@mui/material';
+import { Box, IconButton, InputAdornment, TextField } from '@mui/material';
 import React from 'react';
 
-import PersonIcon from '@mui/icons-material/Person';
+import { UserProfile as Auth0UserProfile } from '@auth0/nextjs-auth0/client';
+import { UserProfile } from '@gycoding/nebula';
 import EmailIcon from '@mui/icons-material/Email';
+import PersonIcon from '@mui/icons-material/Person';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import { EditData, User } from '@/domain/user';
-import { UserProfile } from '@auth0/nextjs-auth0/client';
-import TextFieldCopyTemplate from '../atoms/textfieldCopyPaste';
-import { motion } from 'framer-motion';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { motion } from 'framer-motion';
+import TextFieldCopyTemplate from '../atoms/textfieldCopyPaste';
 
 interface UserDataProps {
-  user: UserProfile | undefined;
-  gyUser: User;
+  user: Auth0UserProfile | undefined;
+  gyUser: UserProfile;
   isEditing: boolean;
-  setEditData: React.Dispatch<React.SetStateAction<EditData>>;
-  editData: EditData;
+  setEditData: React.Dispatch<React.SetStateAction<UserProfile>>;
+  editData: UserProfile;
   updateApiKey: () => void;
   isUpdatingAPIKEY: boolean;
 }
@@ -230,7 +230,7 @@ export default function UserData({
           <TextFieldCopyTemplate
             label="API KEY"
             disabled
-            value={gyUser!.apiKey}
+            value={gyUser!.apiKey as string}
           />
 
           {isEditing && (
