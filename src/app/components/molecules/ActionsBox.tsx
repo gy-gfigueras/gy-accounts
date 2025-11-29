@@ -1,7 +1,8 @@
+import { fadeInUpVariants } from '@/utils/animations/variants';
 import { lexendFont } from '@/utils/fonts';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { motion } from 'framer-motion';
-import React from 'react';
+import Button from '../atoms/Button';
 
 interface ActionsBoxProps {
   isEditing: boolean;
@@ -20,9 +21,10 @@ export default function ActionsBox({
 }: ActionsBoxProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 2.5 }}
+      variants={fadeInUpVariants}
+      initial="hidden"
+      animate="visible"
+      transition={{ delay: 0.9 }}
     >
       <Box
         sx={{
@@ -42,19 +44,14 @@ export default function ActionsBox({
             }}
           >
             <Button
+              gradient={true}
               variant="contained"
               sx={{
                 fontFamily: lexendFont.style.fontFamily,
                 fontSize: ['12px', '14px'],
-                transition: 'background 0.3s',
-                '&:hover': {
-                  background: 'magenta',
-                },
               }}
-              color="info"
               onClick={handleSaveEdit}
               disabled={isLoadingUpdate}
-              loading={isLoadingUpdate}
             >
               Save Changes
             </Button>
@@ -73,17 +70,12 @@ export default function ActionsBox({
         ) : (
           <>
             <Button
+              gradient={true}
               sx={{
-                background: '#8C54FF',
                 fontFamily: lexendFont.style.fontFamily,
                 fontSize: ['12px', '14px'],
-                transition: '0.3s',
-                '&:hover': {
-                  background: 'magenta',
-                },
               }}
               variant="contained"
-              color="primary"
               onClick={handleEditClick}
             >
               Edit Profile
@@ -95,10 +87,15 @@ export default function ActionsBox({
                 sx={(theme) => ({
                   fontFamily: lexendFont.style.fontFamily,
                   fontSize: ['12px', '14px'],
-                  transition: '0.3s',
+                  borderColor: theme.palette.error.main,
+                  color: theme.palette.error.main,
+                  transition: 'all 0.3s ease',
                   '&:hover': {
-                    background: 'red',
-                    color: theme.palette.text.primary,
+                    background: theme.palette.error.main,
+                    color: '#fff',
+                    borderColor: theme.palette.error.main,
+                    boxShadow: '0 8px 20px rgba(244, 67, 54, 0.4)',
+                    transform: 'translateY(-2px)',
                   },
                 })}
               >

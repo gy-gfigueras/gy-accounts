@@ -2,6 +2,8 @@ import { lexendFont } from '@/utils/fonts';
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material';
 import React from 'react';
 
+import { fadeInUpVariants } from '@/utils/animations/variants';
+import colors from '@/utils/theme/colors';
 import { UserProfile as Auth0UserProfile } from '@auth0/nextjs-auth0/client';
 import { UserProfile } from '@gycoding/nebula';
 import EmailIcon from '@mui/icons-material/Email';
@@ -42,9 +44,10 @@ export default function UserData({
       }}
     >
       <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.3 }}
       >
         {isEditing ? (
           <TextField
@@ -55,6 +58,15 @@ export default function UserData({
             sx={{
               mb: '8px',
               borderBottom: '2px solid #8C54FF',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                '& .MuiInput-underline:before': {
+                  borderBottomColor: colors.primary.light,
+                },
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: colors.primary.main,
+              },
             }}
             variant="standard"
             slotProps={{
@@ -112,9 +124,10 @@ export default function UserData({
         )}
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, x: -30 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 1 }}
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.5 }}
         style={{ width: '100%', height: '100%' }}
       >
         <Box
@@ -141,6 +154,15 @@ export default function UserData({
               sx={{
                 mb: '8px',
                 borderBottom: '2px solid #8C54FF',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  '& .MuiInput-underline:before': {
+                    borderBottomColor: colors.primary.light,
+                  },
+                },
+                '& .MuiInput-underline:after': {
+                  borderBottomColor: colors.primary.main,
+                },
               }}
               slotProps={{
                 htmlInput: {
@@ -194,7 +216,10 @@ export default function UserData({
             value={user?.email}
             disabled
             variant="standard"
-            sx={{ mb: '8px' }}
+            sx={{
+              mb: '8px',
+              transition: 'all 0.3s ease',
+            }}
             slotProps={{
               htmlInput: {
                 style: {
@@ -213,9 +238,10 @@ export default function UserData({
         </Box>
       </motion.div>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1.5 }}
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.7 }}
       >
         <Box
           sx={{
@@ -241,14 +267,30 @@ export default function UserData({
                 width: '48px',
                 height: '48px',
                 marginTop: '-6px',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.1)',
+                  backgroundColor: 'rgba(140, 84, 255, 0.1)',
+                },
               }}
             >
-              <RefreshIcon
-                sx={{
-                  width: '32px',
-                  height: '32px',
+              <motion.div
+                animate={{
+                  rotate: isUpdatingAPIKEY ? 360 : 0,
                 }}
-              />
+                transition={{
+                  duration: 0.6,
+                  ease: 'easeInOut',
+                  repeat: isUpdatingAPIKEY ? Infinity : 0,
+                }}
+              >
+                <RefreshIcon
+                  sx={{
+                    width: '32px',
+                    height: '32px',
+                  }}
+                />
+              </motion.div>
             </IconButton>
           )}
         </Box>
