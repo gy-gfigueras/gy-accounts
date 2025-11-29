@@ -41,18 +41,10 @@ async function fetchFromGyCoding(url: string, options: RequestInit) {
   return response;
 }
 
-async function handleGet(API_URL: string, headers: any, baseUrl: string) {
+async function handleGet(API_URL: string, headers: any) {
   const res = await fetchFromGyCoding(API_URL, { method: 'GET', headers });
 
   const profile: UserProfile = await res.json();
-
-  // Ajuste de imágenes en desarrollo
-  if (process.env.ENVIRONMENT === 'DEVELOP' && profile.picture) {
-    profile.picture = profile.picture.replace(
-      'https://api.gycoding.com',
-      baseUrl
-    );
-  }
 
   return NextResponse.json(profile);
 }
@@ -90,7 +82,7 @@ async function handler(request: NextRequest) {
 
     switch (request.method) {
       case 'GET':
-        return await handleGet(API_URL, headers, baseUrl);
+        return await handleGet(API_URL, headers);
 
       case 'PUT':
         return await handlePut(request, API_URL, headers);
