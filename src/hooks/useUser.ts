@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { User, UserUpdateData } from '../domain/user';
-import { getUser, updateUser } from '../services/user';
-import useSWR, { mutate } from 'swr';
+import { UserProfile } from '@gycoding/nebula';
 import { useState } from 'react';
-import { updateApiKey } from '../services/user';
+import useSWR, { mutate } from 'swr';
+import { getUser, updateApiKey, updateUser } from '../services/user';
 
 interface useUserProps {
-  data: User | undefined;
+  data: UserProfile | undefined;
   isLoading: boolean;
   error: Error | null;
-  update: (data: UserUpdateData) => Promise<void>;
+  update: (data: UserProfile) => Promise<void>;
   isLoadingUpdate: boolean;
   isErrorUpdate: boolean;
   isUpdated: boolean;
@@ -24,7 +23,7 @@ interface useUserProps {
 }
 
 export function useUser(): useUserProps {
-  const { data, isLoading, error } = useSWR('/api/auth/get', getUser);
+  const { data, isLoading, error } = useSWR('/api/auth/profile', getUser);
   const [isErrorUpdate, setIsErrorUpdate] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
 
@@ -33,11 +32,11 @@ export function useUser(): useUserProps {
   const [isErrorUpdateAPIKEY, setIsErrorUpdateAPIKEY] = useState(false);
   const [isUpdatedAPIKEY, setIsUpdatedAPIKEY] = useState(false);
 
-  const update = async (updateData: UserUpdateData) => {
+  const update = async (updateData: UserProfile) => {
     setIsLoadingUpdate(true);
     try {
       await updateUser(updateData);
-      await mutate('/api/auth/get', async () => await getUser(), {
+      await mutate('/api/auth/profile', async () => await getUser(), {
         revalidate: true,
       });
       setIsUpdated(true);
@@ -56,7 +55,7 @@ export function useUser(): useUserProps {
     setIsUpdatingAPIKEY(true);
     try {
       await updateApiKey();
-      await mutate('/api/auth/get', async () => await getUser(), {
+      await mutate('/api/auth/profile', async () => await getUser(), {
         revalidate: true,
       });
       setIsErrorUpdateAPIKEY(false);

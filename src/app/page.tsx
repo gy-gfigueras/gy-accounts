@@ -1,20 +1,20 @@
 /* eslint-disable react/react-in-jsx-scope */
 'use client';
 
-import { useState } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { Card, CardContent, Typography, Box } from '@mui/material';
 import { useUser as useUserGY } from '@/hooks/useUser';
-import { ProfileSkeleton } from './components/organisms/ProfileSkeleton';
+import { ELogs } from '@/utils/constants/ELogs';
+import { ESeverity } from '@/utils/constants/ESeverity';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { UserProfile } from '@gycoding/nebula';
+import { Box, Card, CardContent, Typography } from '@mui/material';
+import { useState } from 'react';
 import { toBase64 } from '../utils/global';
-import UserData from './components/molecules/UserData';
-import RoleBox from './components/molecules/RoleBox';
+import AnimatedAlert from './components/atoms/Alert';
 import ActionsBox from './components/molecules/ActionsBox';
 import CardHeader from './components/molecules/CardHeader';
-import { EditData } from '@/domain/user';
-import { ELogs } from '@/utils/constants/ELogs';
-import AnimatedAlert from './components/atoms/Alert';
-import { ESeverity } from '@/utils/constants/ESeverity';
+import RoleBox from './components/molecules/RoleBox';
+import UserData from './components/molecules/UserData';
+import { ProfileSkeleton } from './components/organisms/ProfileSkeleton';
 
 function Home() {
   const { user } = useUser();
@@ -38,10 +38,13 @@ function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [editData, setEditData] = useState<EditData>({
+  const [editData, setEditData] = useState<UserProfile>({
     username: gyUser?.username || '',
     picture: gyUser?.picture || '',
-    phoneNumber: gyUser?.phoneNumber || null,
+    phoneNumber: gyUser?.phoneNumber || '',
+    roles: gyUser?.roles || [],
+    email: gyUser?.email || '',
+    apiKey: gyUser?.apiKey || '',
   });
 
   const handleOpenErrorAlert = isErrorUpdate;
@@ -75,7 +78,10 @@ function Home() {
     setEditData({
       username: gyUser?.username || '',
       picture: gyUser?.picture || '',
-      phoneNumber: gyUser?.phoneNumber || null,
+      phoneNumber: gyUser?.phoneNumber || '',
+      roles: gyUser?.roles || [],
+      email: gyUser?.email || '',
+      apiKey: gyUser?.apiKey || '',
     });
     setIsEditing(true);
   };
@@ -85,7 +91,10 @@ function Home() {
     setEditData({
       username: '',
       picture: '',
-      phoneNumber: null,
+      phoneNumber: '',
+      roles: [],
+      email: '',
+      apiKey: '',
     });
   };
 
