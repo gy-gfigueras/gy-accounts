@@ -1,15 +1,15 @@
-import { ERole } from '@/utils/constants/roles.enum';
+/* eslint-disable react/react-in-jsx-scope */
 import { lexendFont } from '@/utils/fonts';
-import { Chip } from '@mui/material';
-import React from 'react';
-import Brightness1Icon from '@mui/icons-material/Brightness1';
 import RoleTheme from '@/utils/functions/RoleTheme';
+import { ERole } from '@gycoding/nebula';
+import Brightness1Icon from '@mui/icons-material/Brightness1';
+import { Chip } from '@mui/material';
 
 interface RoleChipProps {
   role: ERole;
 }
 
-export function RoleChip({ role }: RoleChipProps) {
+export function RoleChip({ role }: RoleChipProps): JSX.Element {
   return (
     <Chip
       icon={<Brightness1Icon />}

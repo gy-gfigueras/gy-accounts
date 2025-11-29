@@ -1,12 +1,11 @@
-import { ERole } from '@/utils/constants/roles.enum';
+/* eslint-disable react/react-in-jsx-scope */
+import { ERole, UserProfile } from '@gycoding/nebula';
 import { Box, Typography } from '@mui/material';
-import React from 'react';
-import { RoleChip } from '../atoms/RoleChip';
-import { User } from '@/domain/user';
 import { motion } from 'framer-motion';
+import { RoleChip } from '../atoms/RoleChip';
 
 interface RoleBoxProps {
-  gyUser: User;
+  gyUser: UserProfile;
 }
 
 export default function RoleBox({ gyUser }: RoleBoxProps) {
