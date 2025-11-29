@@ -20,8 +20,8 @@ export default function RoleBox({ gyUser }: RoleBoxProps) {
           Roles
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: ['5px', '1rem'] }}>
-          {gyUser.roles?.map((role) => (
-            <RoleChip key={role} role={role as ERole} />
+          {gyUser.roles?.map((role, index) => (
+            <RoleChip key={role} role={role as ERole} index={index} />
           ))}
         </Box>
       </motion.div>

@@ -2,14 +2,18 @@
 'use client';
 
 import { useUser as useUserGY } from '@/hooks/useUser';
+import { cardVariants } from '@/utils/animations/variants';
 import { ELogs } from '@/utils/constants/ELogs';
 import { ESeverity } from '@/utils/constants/ESeverity';
+import colors from '@/utils/theme/colors';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { UserProfile } from '@gycoding/nebula';
-import { Box, Card, CardContent, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Box, Card, CardContent, Typography, useTheme } from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { toBase64 } from '../utils/global';
 import AnimatedAlert from './components/atoms/Alert';
+import AnimatedBackground from './components/atoms/AnimatedBackground';
 import ActionsBox from './components/molecules/ActionsBox';
 import CardHeader from './components/molecules/CardHeader';
 import RoleBox from './components/molecules/RoleBox';
@@ -18,6 +22,7 @@ import { ProfileSkeleton } from './components/organisms/ProfileSkeleton';
 
 function Home() {
   const { user } = useUser();
+  const theme = useTheme();
   const {
     data: gyUser,
     isLoading: gyUserLoading,
@@ -38,6 +43,7 @@ function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [showContent, setShowContent] = useState(false);
   const [editData, setEditData] = useState<UserProfile>({
     username: gyUser?.username || '',
     picture: gyUser?.picture || '',
@@ -73,6 +79,17 @@ function Home() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!gyUserLoading && gyUser) {
+      const timer = setTimeout(() => {
+        setShowContent(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      setShowContent(false);
+    }
+  }, [gyUserLoading, gyUser]);
 
   const handleEditClick = () => {
     setEditData({
@@ -131,86 +148,115 @@ function Home() {
     }
   };
 
-  if (gyUserLoading) {
-    return (
-      <Box
-        sx={{
-          minHeight: '100vh',
-          width: '100vw',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'start',
-          paddingTop: '5%',
-        }}
-      >
-        <ProfileSkeleton />
-      </Box>
-    );
-  }
-
-  if (!gyUser) {
+  if (!gyUser && !gyUserLoading) {
     return (
       <div>
         <Typography variant="h6">{ELogs.NO_USER_DATA_AVAILABLE}</Typography>
       </div>
     );
   }
+
   return (
     <Box
       sx={{
         minHeight: '100vh',
-        width: '100vw',
+        width: '100%',
+        maxWidth: '100vw',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'start',
         paddingTop: ['18%', '10%', '5%'],
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      <AnimatedBackground />
       <Box
         sx={{
           padding: '16px',
           width: '100%',
           paddingX: '5%',
           margin: '0 auto',
+          position: 'relative',
         }}
       >
-        <Card
-          sx={{
-            borderRadius: '12px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            overflow: 'hidden',
-            padding: '16px',
-          }}
-        >
-          <CardHeader
-            previewImage={previewImage}
-            editData={editData}
-            gyUser={gyUser}
-            isEditing={isEditing}
-            handleImageChange={handleImageChange}
-          />
-          <CardContent sx={{ pt: ['50px', '80px'], pb: '10px' }}>
-            <UserData
-              user={user}
-              gyUser={gyUser}
-              isEditing={isEditing}
-              setEditData={setEditData}
-              editData={editData}
-              updateApiKey={handleRefreshAPIKey}
-              isUpdatingAPIKEY={isUpdatingAPIKEY}
-            />
-            <RoleBox gyUser={gyUser} />
-            <ActionsBox
-              isEditing={isEditing}
-              handleEditClick={handleEditClick}
-              handleSaveEdit={handleSaveEdit}
-              handleCancelEdit={handleCancelEdit}
-              isLoadingUpdate={isLoadingUpdate}
-            />
-          </CardContent>
-        </Card>
+        <AnimatePresence mode="sync" initial={false}>
+          {gyUserLoading ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                width: '100%',
+                padding: '16px',
+                paddingLeft: '5%',
+                paddingRight: '5%',
+              }}
+            >
+              <ProfileSkeleton />
+            </motion.div>
+          ) : showContent ? (
+            <motion.div
+              key="content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+            >
+              <Card
+                component={motion.div}
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+                sx={{
+                  background:
+                    theme.palette.mode === 'dark'
+                      ? 'rgba(18, 18, 18, 0.8)'
+                      : 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(20px)',
+                  border: `1px solid ${colors.glass.border}`,
+                  borderRadius: '24px',
+                  overflow: 'visible',
+                  boxShadow: colors.shadow.card,
+                  padding: '16px',
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                <CardHeader
+                  previewImage={previewImage}
+                  editData={editData}
+                  gyUser={gyUser!}
+                  isEditing={isEditing}
+                  handleImageChange={handleImageChange}
+                />
+                <CardContent sx={{ pt: ['50px', '80px'], pb: '10px' }}>
+                  <UserData
+                    user={user}
+                    gyUser={gyUser!}
+                    isEditing={isEditing}
+                    setEditData={setEditData}
+                    editData={editData}
+                    updateApiKey={handleRefreshAPIKey}
+                    isUpdatingAPIKEY={isUpdatingAPIKEY}
+                  />
+                  <RoleBox gyUser={gyUser!} />
+                  <ActionsBox
+                    isEditing={isEditing}
+                    handleEditClick={handleEditClick}
+                    handleSaveEdit={handleSaveEdit}
+                    handleCancelEdit={handleCancelEdit}
+                    isLoadingUpdate={isLoadingUpdate}
+                  />
+                </CardContent>
+              </Card>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </Box>
       {/* <AnimatedAlert
         severity={ESeverity.ERROR}
