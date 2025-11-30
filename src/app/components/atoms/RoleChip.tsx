@@ -84,6 +84,7 @@ export function RoleChip({ role, index = 0 }: RoleChipProps): JSX.Element {
           fontSize: '0.813rem',
           fontFamily: lexendFont.style.fontFamily,
           transition: 'all 0.2s ease',
+          borderRadius: '10px',
           ...getRoleStyles(role),
         }}
       />

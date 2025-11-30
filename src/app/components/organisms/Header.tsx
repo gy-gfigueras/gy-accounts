@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 // src/app/components/organisms/Header.tsx
 
 'use client';
@@ -50,7 +51,7 @@ export default function Header({ title }: HeaderProps): JSX.Element {
         <Typography
           marginTop={'4px'}
           fontSize="20px"
-          fontWeight={700}
+          fontWeight={'bold'}
           fontFamily={valorantFont.style.fontFamily}
           variant="h5"
         >
