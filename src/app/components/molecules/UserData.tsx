@@ -45,11 +45,11 @@ export default function UserData({
       <Box
         sx={{
           display: { xs: isEditing ? 'none' : 'block', sm: 'none' },
-          borderRadius: '14px',
+          borderRadius: '12px',
           overflow: 'hidden',
           border: '1px solid',
           borderColor: 'divider',
-          mb: '16px',
+          mb: '8px',
         }}
       >
         <Box
@@ -57,12 +57,12 @@ export default function UserData({
             display: 'flex',
             alignItems: 'center',
             px: 2,
-            py: 1.75,
+            py: 1,
             gap: 1.5,
           }}
         >
           <PhoneAndroidIcon
-            sx={{ color: 'text.secondary', fontSize: 20, flexShrink: 0 }}
+            sx={{ color: 'text.secondary', fontSize: 18, flexShrink: 0 }}
           />
           <Box>
             <Typography
@@ -88,12 +88,12 @@ export default function UserData({
             display: 'flex',
             alignItems: 'center',
             px: 2,
-            py: 1.75,
+            py: 1,
             gap: 1.5,
           }}
         >
           <EmailIcon
-            sx={{ color: 'text.secondary', fontSize: 20, flexShrink: 0 }}
+            sx={{ color: 'text.secondary', fontSize: 18, flexShrink: 0 }}
           />
           <Box>
             <Typography
@@ -114,7 +114,7 @@ export default function UserData({
           </Box>
         </Box>
         <Divider />
-        <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
+        <Box sx={{ px: 2, pt: 1, pb: 0 }}>
           <TextFieldCopyTemplate
             label="API KEY"
             disabled

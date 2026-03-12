@@ -159,7 +159,8 @@ function Home() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        height: { xs: '100dvh', sm: 'auto' },
+        minHeight: { xs: 'unset', sm: '100vh' },
         width: '100%',
         maxWidth: '100vw',
         display: 'flex',
@@ -243,8 +244,8 @@ function Home() {
                 />
                 <CardContent
                   sx={{
-                    pt: ['16px', '80px'],
-                    pb: ['16px', '10px'],
+                    pt: ['8px', '80px'],
+                    pb: ['4px', '10px'],
                     px: ['16px', '16px'],
                   }}
                 >
