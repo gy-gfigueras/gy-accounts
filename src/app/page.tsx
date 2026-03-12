@@ -166,7 +166,7 @@ function Home() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'start',
-        paddingTop: ['18%', '10%', '5%'],
+        paddingTop: ['64px', '10%', '5%'],
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -174,33 +174,34 @@ function Home() {
       <AnimatedBackground />
       <Box
         sx={{
-          padding: '16px',
+          padding: ['0', '16px'],
           width: '100%',
-          paddingX: '5%',
+          paddingX: ['0', '5%'],
           margin: '0 auto',
           position: 'relative',
         }}
       >
         <AnimatePresence mode="sync" initial={false}>
           {gyUserLoading ? (
-            <motion.div
+            <Box
+              component={motion.div}
               key="skeleton"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
-              style={{
+              sx={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 right: 0,
                 width: '100%',
-                padding: '16px',
-                paddingLeft: '5%',
-                paddingRight: '5%',
+                padding: ['0', '16px'],
+                paddingLeft: ['0', '5%'],
+                paddingRight: ['0', '5%'],
               }}
             >
               <ProfileSkeleton />
-            </motion.div>
+            </Box>
           ) : showContent ? (
             <motion.div
               key="content"
@@ -214,16 +215,22 @@ function Home() {
                 initial="hidden"
                 animate="visible"
                 sx={{
-                  background:
-                    theme.palette.mode === 'dark'
-                      ? 'rgba(18, 18, 18, 0.8)'
-                      : 'rgba(255, 255, 255, 0.8)',
-                  backdropFilter: 'blur(20px)',
-                  border: `1px solid ${colors.glass.border}`,
-                  borderRadius: '24px',
+                  background: {
+                    xs: 'transparent',
+                    sm:
+                      theme.palette.mode === 'dark'
+                        ? 'rgba(18, 18, 18, 0.8)'
+                        : 'rgba(255, 255, 255, 0.8)',
+                  },
+                  backdropFilter: { xs: 'none', sm: 'blur(20px)' },
+                  border: {
+                    xs: 'none',
+                    sm: `1px solid ${colors.glass.border}`,
+                  },
+                  borderRadius: { xs: 0, sm: '24px' },
                   overflow: 'visible',
-                  boxShadow: colors.shadow.card,
-                  padding: '16px',
+                  boxShadow: { xs: 'none', sm: colors.shadow.card },
+                  padding: { xs: 0, sm: '16px' },
                   transition: 'all 0.3s ease',
                 }}
               >
@@ -234,7 +241,13 @@ function Home() {
                   isEditing={isEditing}
                   handleImageChange={handleImageChange}
                 />
-                <CardContent sx={{ pt: ['50px', '80px'], pb: '10px' }}>
+                <CardContent
+                  sx={{
+                    pt: ['16px', '80px'],
+                    pb: ['16px', '10px'],
+                    px: ['16px', '16px'],
+                  }}
+                >
                   <UserData
                     user={user}
                     gyUser={gyUser!}

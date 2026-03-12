@@ -29,8 +29,10 @@ export default function ActionsBox({
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          flexDirection: ['column', 'row'],
+          justifyContent: ['stretch', 'space-between'],
           alignItems: 'center',
+          gap: ['12px', '0'],
           mt: '24px',
         }}
       >
@@ -41,6 +43,7 @@ export default function ActionsBox({
               gap: '16px',
               justifyContent: 'space-between',
               flexDirection: ['column', 'row'],
+              width: '100%',
             }}
           >
             <Button
@@ -49,6 +52,7 @@ export default function ActionsBox({
               sx={{
                 fontFamily: lexendFont.style.fontFamily,
                 fontSize: ['12px', '14px'],
+                width: ['100%', 'auto'],
               }}
               onClick={handleSaveEdit}
               disabled={isLoadingUpdate}
@@ -60,6 +64,7 @@ export default function ActionsBox({
               sx={{
                 fontFamily: lexendFont.style.fontFamily,
                 fontSize: ['12px', '14px'],
+                width: ['100%', 'auto'],
               }}
               color="secondary"
               onClick={handleCancelEdit}
@@ -71,37 +76,44 @@ export default function ActionsBox({
           <>
             <Button
               gradient={true}
+              variant="contained"
               sx={{
                 fontFamily: lexendFont.style.fontFamily,
                 fontSize: ['12px', '14px'],
+                width: ['100%', 'auto'],
               }}
-              variant="contained"
               onClick={handleEditClick}
             >
               Edit Profile
             </Button>
-            <a href="/api/auth/logout" style={{ textDecoration: 'none' }}>
-              <Button
-                variant="outlined"
-                color="error"
-                sx={(theme) => ({
-                  fontFamily: lexendFont.style.fontFamily,
-                  fontSize: ['12px', '14px'],
-                  borderColor: theme.palette.error.main,
-                  color: theme.palette.error.main,
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    background: theme.palette.error.main,
-                    color: '#fff',
-                    borderColor: theme.palette.error.main,
-                    boxShadow: '0 8px 20px rgba(244, 67, 54, 0.4)',
-                    transform: 'translateY(-2px)',
-                  },
-                })}
+            <Box sx={{ width: ['100%', 'auto'] }}>
+              <a
+                href="/api/auth/logout"
+                style={{ textDecoration: 'none', display: 'block' }}
               >
-                Logout
-              </Button>
-            </a>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={(theme) => ({
+                    fontFamily: lexendFont.style.fontFamily,
+                    fontSize: ['12px', '14px'],
+                    width: ['100%', 'auto'],
+                    borderColor: theme.palette.error.main,
+                    color: theme.palette.error.main,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      background: theme.palette.error.main,
+                      color: '#fff',
+                      borderColor: theme.palette.error.main,
+                      boxShadow: '0 8px 20px rgba(244, 67, 54, 0.4)',
+                      transform: 'translateY(-2px)',
+                    },
+                  })}
+                >
+                  Logout
+                </Button>
+              </a>
+            </Box>
           </>
         )}
       </Box>

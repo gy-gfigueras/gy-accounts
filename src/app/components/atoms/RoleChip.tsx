@@ -7,6 +7,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import PersonIcon from '@mui/icons-material/Person';
 import { Chip } from '@mui/material';
 import { motion } from 'framer-motion';
+import AssistantIcon from '@mui/icons-material/Assistant';
 
 interface RoleChipProps {
   role: ERole;
@@ -20,6 +21,8 @@ export function RoleChip({ role, index = 0 }: RoleChipProps): JSX.Element {
         return '#4caf50'; // Verde
       case ERole.DEVELOPER:
         return '#2196f3'; // Azul
+      case ERole.AI:
+        return '#e7dc11'; // amarillo
       default:
         return '#9c27b0'; // Morado
     }
@@ -33,6 +36,8 @@ export function RoleChip({ role, index = 0 }: RoleChipProps): JSX.Element {
         return <LockIcon sx={iconStyle} />;
       case ERole.DEVELOPER:
         return <CodeIcon sx={iconStyle} />;
+      case ERole.AI:
+        return <AssistantIcon sx={iconStyle} />;
       default:
         return <PersonIcon sx={iconStyle} />;
     }
@@ -48,7 +53,9 @@ export function RoleChip({ role, index = 0 }: RoleChipProps): JSX.Element {
           ? 'rgba(76, 175, 80, 0.08)'
           : role === ERole.DEVELOPER
             ? 'rgba(33, 150, 243, 0.08)'
-            : 'rgba(156, 39, 176, 0.08)',
+            : role === ERole.AI
+              ? 'rgba(231, 220, 17, 0.08)'
+              : 'rgba(156, 39, 176, 0.08)',
       borderWidth: '1px',
       '& .MuiChip-label': {
         color: `${color} !important`,
