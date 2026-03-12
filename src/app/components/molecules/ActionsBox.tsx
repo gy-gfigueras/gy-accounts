@@ -32,8 +32,8 @@ export default function ActionsBox({
           flexDirection: ['column', 'row'],
           justifyContent: ['stretch', 'space-between'],
           alignItems: 'center',
-          gap: ['12px', '0'],
-          mt: '24px',
+          gap: ['8px', '0'],
+          mt: ['12px', '24px'],
         }}
       >
         {isEditing ? (

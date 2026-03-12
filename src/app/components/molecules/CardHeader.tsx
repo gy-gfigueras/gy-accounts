@@ -75,7 +75,7 @@ export default function CardHeader({
         {/* Banner */}
         <Box
           sx={(theme) => ({
-            height: '110px',
+            height: '72px',
             background:
               theme.palette.mode === 'dark'
                 ? isEditing
@@ -90,8 +90,8 @@ export default function CardHeader({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            mt: '-44px',
-            pb: '12px',
+            mt: '-34px',
+            pb: '6px',
             position: 'relative',
             zIndex: 10,
           }}
@@ -100,14 +100,14 @@ export default function CardHeader({
             <Avatar
               src={avatarSrc}
               alt={displayName}
-              sx={{ width: 88, height: 88, ...avatarSx }}
+              sx={{ width: 68, height: 68, ...avatarSx }}
             />
             {fileInput}
           </Box>
           <Typography
-            variant="h6"
+            variant="body1"
             fontWeight={700}
-            sx={{ mt: '10px', fontFamily: lexendFont.style.fontFamily }}
+            sx={{ mt: '6px', fontFamily: lexendFont.style.fontFamily }}
           >
             {displayName}
           </Typography>
