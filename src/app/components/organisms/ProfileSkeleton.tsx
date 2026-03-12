@@ -32,15 +32,18 @@ export function ProfileSkeleton() {
         sx={{
           width: '100%',
           maxWidth: '100%',
-          background:
-            theme.palette.mode === 'dark'
-              ? 'rgba(18, 18, 18, 0.8)'
-              : 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(20px)',
-          border: `1px solid ${colors.glass.border}`,
-          borderRadius: '24px',
-          padding: '16px',
-          boxShadow: colors.shadow.card,
+          background: {
+            xs: 'transparent',
+            sm:
+              theme.palette.mode === 'dark'
+                ? 'rgba(18, 18, 18, 0.8)'
+                : 'rgba(255, 255, 255, 0.8)',
+          },
+          backdropFilter: { xs: 'none', sm: 'blur(20px)' },
+          border: { xs: 'none', sm: `1px solid ${colors.glass.border}` },
+          borderRadius: { xs: 0, sm: '24px' },
+          padding: { xs: 0, sm: '16px' },
+          boxShadow: { xs: 'none', sm: colors.shadow.card },
           flexShrink: 0,
           overflow: 'visible',
         }}
@@ -48,12 +51,12 @@ export function ProfileSkeleton() {
         <Box
           sx={{
             position: 'relative',
-            height: '120px',
+            height: ['100px', '120px'],
             background:
               theme.palette.mode === 'dark'
                 ? 'rgba(140, 84, 255, 0.1)'
                 : 'rgba(140, 84, 255, 0.05)',
-            borderRadius: '16px',
+            borderRadius: ['0', '16px'],
             overflow: 'visible',
           }}
         >

@@ -10,7 +10,7 @@ interface RoleBoxProps {
 
 export default function RoleBox({ gyUser }: RoleBoxProps) {
   return (
-    <Box sx={{ mt: '24px' }}>
+    <Box sx={{ mt: ['16px', '24px'] }}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

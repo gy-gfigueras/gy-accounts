@@ -1,5 +1,12 @@
 import { lexendFont } from '@/utils/fonts';
-import { Box, IconButton, InputAdornment, TextField } from '@mui/material';
+import {
+  Box,
+  Divider,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 
 import { fadeInUpVariants } from '@/utils/animations/variants';
@@ -33,108 +40,288 @@ export default function UserData({
   isUpdatingAPIKEY,
 }: UserDataProps) {
   return (
-    <Box
-      sx={{
-        mb: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItems: 'start',
-        gap: ['.5rem', '1rem'],
-      }}
-    >
+    <Box sx={{ mb: '20px', width: '100%' }}>
+      {/* ===== MOBILE: info rows (view mode) ===== */}
+      <Box
+        sx={{
+          display: { xs: isEditing ? 'none' : 'block', sm: 'none' },
+          borderRadius: '14px',
+          overflow: 'hidden',
+          border: '1px solid',
+          borderColor: 'divider',
+          mb: '16px',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            px: 2,
+            py: 1.75,
+            gap: 1.5,
+          }}
+        >
+          <PhoneAndroidIcon
+            sx={{ color: 'text.secondary', fontSize: 20, flexShrink: 0 }}
+          />
+          <Box>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              sx={{ lineHeight: 1.2 }}
+            >
+              Phone
+            </Typography>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              sx={{ fontFamily: lexendFont.style.fontFamily }}
+            >
+              {gyUser.phoneNumber || '—'}
+            </Typography>
+          </Box>
+        </Box>
+        <Divider />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            px: 2,
+            py: 1.75,
+            gap: 1.5,
+          }}
+        >
+          <EmailIcon
+            sx={{ color: 'text.secondary', fontSize: 20, flexShrink: 0 }}
+          />
+          <Box>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              sx={{ lineHeight: 1.2 }}
+            >
+              Email
+            </Typography>
+            <Typography
+              variant="body2"
+              fontWeight={500}
+              sx={{ fontFamily: lexendFont.style.fontFamily }}
+            >
+              {user?.email || '—'}
+            </Typography>
+          </Box>
+        </Box>
+        <Divider />
+        <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
+          <TextFieldCopyTemplate
+            label="API KEY"
+            disabled
+            value={gyUser.apiKey as string}
+          />
+        </Box>
+      </Box>
+
+      {/* ===== MOBILE: edit fields (edit mode) ===== */}
+      <Box
+        sx={{
+          display: { xs: isEditing ? 'flex' : 'none', sm: 'none' },
+          flexDirection: 'column',
+          gap: '16px',
+          mb: '16px',
+          width: '100%',
+        }}
+      >
+        <TextField
+          fullWidth
+          value={editData.username}
+          onChange={(e) =>
+            setEditData({ ...editData, username: e.target.value })
+          }
+          label="Username"
+          variant="outlined"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': { borderColor: colors.primary.main },
+            },
+          }}
+          slotProps={{
+            htmlInput: {
+              style: {
+                fontFamily: lexendFont.style.fontFamily,
+                fontWeight: 600,
+              },
+            },
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonIcon sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <TextField
+          fullWidth
+          value={editData.phoneNumber}
+          onChange={(e) =>
+            setEditData({ ...editData, phoneNumber: e.target.value })
+          }
+          label="Phone"
+          variant="outlined"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '&.Mui-focused fieldset': { borderColor: colors.primary.main },
+            },
+          }}
+          slotProps={{
+            htmlInput: { style: { fontFamily: lexendFont.style.fontFamily } },
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PhoneAndroidIcon sx={{ color: 'text.secondary' }} />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ flex: 1 }}>
+            <TextFieldCopyTemplate
+              label="API KEY"
+              disabled
+              value={gyUser.apiKey as string}
+            />
+          </Box>
+          <IconButton
+            disabled={isUpdatingAPIKEY}
+            onClick={updateApiKey}
+            sx={{
+              mb: '8px',
+              width: '48px',
+              height: '48px',
+              flexShrink: 0,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.1)',
+                backgroundColor: 'rgba(140, 84, 255, 0.1)',
+              },
+            }}
+          >
+            <motion.div
+              animate={{ rotate: isUpdatingAPIKEY ? 360 : 0 }}
+              transition={{
+                duration: 0.6,
+                ease: 'easeInOut',
+                repeat: isUpdatingAPIKEY ? Infinity : 0,
+              }}
+            >
+              <RefreshIcon />
+            </motion.div>
+          </IconButton>
+        </Box>
+      </Box>
+
+      {/* ===== DESKTOP: existing layout ===== */}
+
+      {/* Username */}
       <motion.div
         variants={fadeInUpVariants}
         initial="hidden"
         animate="visible"
         transition={{ delay: 0.3 }}
       >
-        {isEditing ? (
-          <TextField
-            value={editData.username}
-            onChange={(e) =>
-              setEditData({ ...editData, username: e.target.value })
-            }
-            sx={{
-              mb: '8px',
-              borderBottom: '2px solid #8C54FF',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                '& .MuiInput-underline:before': {
-                  borderBottomColor: colors.primary.light,
+        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+          {isEditing ? (
+            <TextField
+              value={editData.username}
+              onChange={(e) =>
+                setEditData({ ...editData, username: e.target.value })
+              }
+              sx={{
+                mb: '8px',
+                borderBottom: '2px solid #8C54FF',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  '& .MuiInput-underline:before': {
+                    borderBottomColor: colors.primary.light,
+                  },
                 },
-              },
-              '& .MuiInput-underline:after': {
-                borderBottomColor: colors.primary.main,
-              },
-            }}
-            variant="standard"
-            slotProps={{
-              htmlInput: {
-                style: {
-                  fontFamily: lexendFont.style.fontFamily,
-                  width: '250px',
-                  fontWeight: '700',
-                  fontSize: '25px',
-                  borderRadius: '20px',
+                '& .MuiInput-underline:after': {
+                  borderBottomColor: colors.primary.main,
                 },
-              },
-
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        ) : (
-          <TextField
-            disabled
-            value={gyUser.username}
-            variant="standard"
-            sx={(theme) => ({
-              mb: '8px',
-              '& .MuiInputBase-input.Mui-disabled': {
-                WebkitTextFillColor: theme.palette.text.primary,
-              },
-            })}
-            slotProps={{
-              htmlInput: {
-                style: {
-                  fontFamily: lexendFont.style.fontFamily,
-                  width: 'auto',
-                  fontWeight: '700',
-                  fontSize: '25px',
-                  borderRadius: '20px',
+              }}
+              variant="standard"
+              slotProps={{
+                htmlInput: {
+                  style: {
+                    fontFamily: lexendFont.style.fontFamily,
+                    width: '100%',
+                    maxWidth: '300px',
+                    fontWeight: '700',
+                    fontSize: '25px',
+                    borderRadius: '20px',
+                  },
                 },
-              },
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PersonIcon
-                      sx={(theme) => ({ color: theme.palette.text.primary })}
-                    />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        )}
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          ) : (
+            <TextField
+              disabled
+              value={gyUser.username}
+              variant="standard"
+              sx={(theme) => ({
+                mb: '8px',
+                '& .MuiInputBase-input.Mui-disabled': {
+                  WebkitTextFillColor: theme.palette.text.primary,
+                },
+              })}
+              slotProps={{
+                htmlInput: {
+                  style: {
+                    fontFamily: lexendFont.style.fontFamily,
+                    width: 'auto',
+                    fontWeight: '700',
+                    fontSize: '25px',
+                    borderRadius: '20px',
+                  },
+                },
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon
+                        sx={(theme) => ({ color: theme.palette.text.primary })}
+                      />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          )}
+        </Box>
       </motion.div>
+
+      {/* Phone + Email */}
       <motion.div
         variants={fadeInUpVariants}
         initial="hidden"
         animate="visible"
         transition={{ delay: 0.5 }}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%' }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: ['column', 'row-reverse'],
-            gap: ['.5rem', '1rem'],
+            display: { xs: 'none', sm: 'flex' },
+            flexDirection: 'row-reverse',
+            gap: '1rem',
             alignItems: 'center',
             justifyContent: 'start',
             width: '100%',
@@ -145,10 +332,7 @@ export default function UserData({
               fullWidth
               value={editData.phoneNumber}
               onChange={(e) =>
-                setEditData({
-                  ...editData,
-                  phoneNumber: e.target.value,
-                })
+                setEditData({ ...editData, phoneNumber: e.target.value })
               }
               variant="standard"
               sx={{
@@ -166,9 +350,7 @@ export default function UserData({
               }}
               slotProps={{
                 htmlInput: {
-                  style: {
-                    fontFamily: lexendFont.style.fontFamily,
-                  },
+                  style: { fontFamily: lexendFont.style.fontFamily },
                 },
                 input: {
                   startAdornment: (
@@ -195,9 +377,7 @@ export default function UserData({
               })}
               slotProps={{
                 htmlInput: {
-                  style: {
-                    fontFamily: lexendFont.style.fontFamily,
-                  },
+                  style: { fontFamily: lexendFont.style.fontFamily },
                 },
                 input: {
                   startAdornment: (
@@ -216,16 +396,9 @@ export default function UserData({
             value={user?.email}
             disabled
             variant="standard"
-            sx={{
-              mb: '8px',
-              transition: 'all 0.3s ease',
-            }}
+            sx={{ mb: '8px', transition: 'all 0.3s ease' }}
             slotProps={{
-              htmlInput: {
-                style: {
-                  fontFamily: lexendFont.style.fontFamily,
-                },
-              },
+              htmlInput: { style: { fontFamily: lexendFont.style.fontFamily } },
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
@@ -237,6 +410,8 @@ export default function UserData({
           />
         </Box>
       </motion.div>
+
+      {/* API Key */}
       <motion.div
         variants={fadeInUpVariants}
         initial="hidden"
@@ -245,10 +420,9 @@ export default function UserData({
       >
         <Box
           sx={{
-            display: 'flex',
+            display: { xs: 'none', sm: 'flex' },
             flexDirection: 'row',
             gap: '1rem',
-            width: ['auto', 'auto'],
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -256,9 +430,8 @@ export default function UserData({
           <TextFieldCopyTemplate
             label="API KEY"
             disabled
-            value={gyUser!.apiKey as string}
+            value={gyUser.apiKey as string}
           />
-
           {isEditing && (
             <IconButton
               disabled={isUpdatingAPIKEY}
@@ -275,21 +448,14 @@ export default function UserData({
               }}
             >
               <motion.div
-                animate={{
-                  rotate: isUpdatingAPIKEY ? 360 : 0,
-                }}
+                animate={{ rotate: isUpdatingAPIKEY ? 360 : 0 }}
                 transition={{
                   duration: 0.6,
                   ease: 'easeInOut',
                   repeat: isUpdatingAPIKEY ? Infinity : 0,
                 }}
               >
-                <RefreshIcon
-                  sx={{
-                    width: '32px',
-                    height: '32px',
-                  }}
-                />
+                <RefreshIcon sx={{ width: '32px', height: '32px' }} />
               </motion.div>
             </IconButton>
           )}
