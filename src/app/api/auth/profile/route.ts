@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ELevel } from '@/utils/constants/ELevel';
-import { ELogs } from '@/utils/constants/ELogs';
-import { sendLog } from '@/utils/logs/logHelper';
+import { sendLog, LogLevel, LogMessage } from '@/utils/logs/logHelper';
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { UserProfile } from '@gycoding/nebula';
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,7 +14,7 @@ function getBaseApiUrl() {
 
   const url = urlMap[env || '']?.replace(/['"]/g, '');
 
-  if (!url) throw new Error(ELogs.ENVIROMENT_VARIABLE_NOT_DEFINED);
+  if (!url) throw new Error(LogMessage.CONFIG_GY_API_MISSING);
 
   return url;
 }
@@ -64,10 +62,10 @@ async function handlePut(request: NextRequest, API_URL: string, headers: any) {
 
     return NextResponse.json(data);
   } catch (err: any) {
-    await sendLog(ELevel.ERROR, 'ERROR UPDATING PROFILE');
+    await sendLog(LogLevel.ERROR, LogMessage.PROFILE_UPDATE_FAILED);
     console.error(err);
     return NextResponse.json(
-      { error: 'ERROR UPDATING PROFILE' },
+      { error: LogMessage.PROFILE_UPDATE_FAILED },
       { status: 500 }
     );
   }
@@ -97,7 +95,10 @@ async function handler(request: NextRequest) {
     console.error('Error in /api/auth/profile', error);
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : ELogs.UNKNOWN_ERROR },
+      {
+        error:
+          error instanceof Error ? error.message : LogMessage.UNKNOWN_ERROR,
+      },
       { status: 500 }
     );
   }
