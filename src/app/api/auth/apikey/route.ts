@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ELevel } from '@/utils/constants/ELevel';
-import { ELogs } from '@/utils/constants/ELogs';
-import { sendLog } from '@/utils/logs/logHelper';
+import { sendLog, LogLevel, LogMessage } from '@/utils/logs/logHelper';
 import { getSession } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 
@@ -19,7 +17,7 @@ function getBaseApiUrl() {
 
   const url = urlMap[env || '']?.replace(/['"]/g, '');
 
-  if (!url) throw new Error(ELogs.ENVIROMENT_VARIABLE_NOT_DEFINED);
+  if (!url) throw new Error(LogMessage.CONFIG_GY_API_MISSING);
 
   return url;
 }
@@ -53,13 +51,13 @@ export async function PATCH() {
     const session = await getSession();
     const { idToken, user } = session ?? {};
 
-    await sendLog(ELevel.INFO, ELogs.SESSION_RECIVED, {
+    await sendLog(LogLevel.INFO, LogMessage.SESSION_RETRIEVED, {
       user: user?.sub,
     });
 
     if (!session || !user) {
       return NextResponse.json(
-        { error: ELogs.NO_ACTIVE_SESSION },
+        { error: LogMessage.SESSION_NOT_FOUND },
         { status: 401 }
       );
     }
@@ -73,7 +71,7 @@ export async function PATCH() {
       headers,
     });
 
-    await sendLog(ELevel.INFO, ELogs.API_KEY_HAS_BEEN_UPDATED, {
+    await sendLog(LogLevel.INFO, LogMessage.APIKEY_UPDATED, {
       user: user.sub,
     });
 
@@ -82,12 +80,15 @@ export async function PATCH() {
   } catch (error: any) {
     console.error('Error in /api/auth/metadata/apikey', error);
 
-    await sendLog(ELevel.ERROR, ELogs.API_KEY_CANNOT_BE_UPDATED, {
+    await sendLog(LogLevel.ERROR, LogMessage.APIKEY_UPDATE_FAILED, {
       error: error instanceof Error ? error.message : error,
     });
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : ELogs.UNKNOWN_ERROR },
+      {
+        error:
+          error instanceof Error ? error.message : LogMessage.UNKNOWN_ERROR,
+      },
       { status: 500 }
     );
   }
