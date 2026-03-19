@@ -10,7 +10,7 @@ export async function sendLog(
   message: string,
   data: LogData = {}
 ): Promise<void> {
-  return _sendLog(level, message, 'GY-ACCOUNTS', data);
+  return _sendLog(level, message, 'GY-ACCOUNTS-DASHBOARD', data);
 }
 
 export { LogLevel, LogMessage };
