@@ -49,6 +49,7 @@ async function handleGet(API_URL: string, headers: any) {
 
 async function handlePut(request: NextRequest, API_URL: string, headers: any) {
   const body = await request.json();
+  const user = (await getSession())?.user;
   const { username, picture, phoneNumber } = body;
 
   try {
@@ -59,7 +60,9 @@ async function handlePut(request: NextRequest, API_URL: string, headers: any) {
     });
 
     const data = await response.json();
-
+    await sendLog(LogLevel.INFO, LogMessage.PROFILE_UPDATED, {
+      user: user?.sub,
+    });
     return NextResponse.json(data);
   } catch (err: any) {
     await sendLog(LogLevel.ERROR, LogMessage.PROFILE_UPDATE_FAILED);

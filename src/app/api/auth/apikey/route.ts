@@ -19,6 +19,7 @@ function getBaseApiUrl() {
 
   if (!url) throw new Error(LogMessage.CONFIG_GY_API_MISSING);
 
+  console.log(url);
   return url;
 }
 
@@ -75,8 +76,7 @@ export async function PATCH() {
       user: user.sub,
     });
 
-    // Igual que el otro archivo: devolver JSON aunque sea 204
-    return NextResponse.json({ success: true }, { status: 204 });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: any) {
     console.error('Error in /api/auth/metadata/apikey', error);
 

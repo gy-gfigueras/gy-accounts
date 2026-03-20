@@ -1,5 +1,25 @@
 import { sendLog as _sendLog, LogLevel, type LogData } from '@gycoding/nebula';
 
+const LOG_COLORS: Record<LogLevel, string> = {
+  [LogLevel.DEBUG]: '\x1b[36m',
+  [LogLevel.INFO]: '\x1b[32m',
+  [LogLevel.WARN]: '\x1b[33m',
+  [LogLevel.ERROR]: '\x1b[31m',
+};
+const RESET = '\x1b[0m';
+
+function logConsole(level: LogLevel, message: string, data: LogData): void {
+  const hasExtra = Object.keys(data).length > 0;
+  const extra = hasExtra ? ` ${JSON.stringify(data)}` : '';
+
+  if (process.env.LOG_ENV?.toUpperCase() === 'LOCAL') {
+    const color = LOG_COLORS[level];
+    console.log(`${color}[${level}]${RESET} ${message}${extra}`);
+  } else {
+    console.log(`[GY-ACCOUNTS] [${level}] ${message}${extra}`);
+  }
+}
+
 
 
 enum LogMessage {
@@ -34,6 +54,7 @@ export async function sendLog(
   message: string,
   data: LogData = {}
 ): Promise<void> {
+  logConsole(level, message, data);
   return _sendLog(level, message, 'GY-ACCOUNTS-DASHBOARD', data);
 }
 
