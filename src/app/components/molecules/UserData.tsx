@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { lexendFont } from '@/utils/fonts';
 import {
   Box,
@@ -7,7 +8,20 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+function parsePhone(phone?: string | null): { prefix: string; digits: string } {
+  if (!phone) return { prefix: '+34', digits: '' };
+  const trimmed = phone.trim();
+  const spaceIdx = trimmed.indexOf(' ');
+  if (spaceIdx > 0 && trimmed[0] === '+') {
+    return {
+      prefix: trimmed.slice(0, spaceIdx),
+      digits: trimmed.slice(spaceIdx + 1),
+    };
+  }
+  return { prefix: '+34', digits: trimmed };
+}
 
 import { fadeInUpVariants } from '@/utils/animations/variants';
 import colors from '@/utils/theme/colors';
@@ -39,6 +53,22 @@ export default function UserData({
   updateApiKey,
   isUpdatingAPIKEY,
 }: UserDataProps) {
+  const [phonePrefix, setPhonePrefix] = useState(
+    () => parsePhone(editData.phoneNumber).prefix
+  );
+  const [phoneDigits, setPhoneDigits] = useState(
+    () => parsePhone(editData.phoneNumber).digits
+  );
+
+  useEffect(() => {
+    if (isEditing) {
+      const { prefix, digits } = parsePhone(editData.phoneNumber);
+      setPhonePrefix(prefix);
+      setPhoneDigits(digits);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing]);
+
   return (
     <Box sx={{ mb: '20px', width: '100%' }}>
       {/* ===== MOBILE: info rows (view mode) ===== */}
@@ -162,30 +192,65 @@ export default function UserData({
             },
           }}
         />
-        <TextField
-          fullWidth
-          value={editData.phoneNumber}
-          onChange={(e) =>
-            setEditData({ ...editData, phoneNumber: e.target.value })
-          }
-          label="Phone"
-          variant="outlined"
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              '&.Mui-focused fieldset': { borderColor: colors.primary.main },
-            },
-          }}
-          slotProps={{
-            htmlInput: { style: { fontFamily: lexendFont.style.fontFamily } },
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PhoneAndroidIcon sx={{ color: 'text.secondary' }} />
-                </InputAdornment>
-              ),
-            },
-          }}
-        />
+        <Box sx={{ display: 'flex', gap: '8px', width: '100%' }}>
+          <TextField
+            value={phonePrefix}
+            onChange={(e) => {
+              const newPrefix = e.target.value;
+              setPhonePrefix(newPrefix);
+              setEditData({
+                ...editData,
+                phoneNumber: `${newPrefix} ${phoneDigits}`.trim(),
+              });
+            }}
+            label="Prefix"
+            variant="outlined"
+            sx={{
+              width: '90px',
+              flexShrink: 0,
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': { borderColor: colors.primary.main },
+              },
+            }}
+            slotProps={{
+              htmlInput: {
+                style: {
+                  fontFamily: lexendFont.style.fontFamily,
+                  textAlign: 'center',
+                },
+              },
+            }}
+          />
+          <TextField
+            fullWidth
+            value={phoneDigits}
+            onChange={(e) => {
+              const newDigits = e.target.value;
+              setPhoneDigits(newDigits);
+              setEditData({
+                ...editData,
+                phoneNumber: `${phonePrefix} ${newDigits}`.trim(),
+              });
+            }}
+            label="Phone"
+            variant="outlined"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': { borderColor: colors.primary.main },
+              },
+            }}
+            slotProps={{
+              htmlInput: { style: { fontFamily: lexendFont.style.fontFamily } },
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneAndroidIcon sx={{ color: 'text.secondary' }} />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box sx={{ flex: 1 }}>
             <TextFieldCopyTemplate
@@ -328,41 +393,85 @@ export default function UserData({
           }}
         >
           {isEditing ? (
-            <TextField
-              fullWidth
-              value={editData.phoneNumber}
-              onChange={(e) =>
-                setEditData({ ...editData, phoneNumber: e.target.value })
-              }
-              variant="standard"
+            <Box
               sx={{
+                display: 'flex',
+                gap: '8px',
+                width: '100%',
                 mb: '8px',
-                borderBottom: '2px solid #8C54FF',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  '& .MuiInput-underline:before': {
-                    borderBottomColor: colors.primary.light,
+                alignItems: 'flex-end',
+              }}
+            >
+              <TextField
+                value={phonePrefix}
+                onChange={(e) => {
+                  const newPrefix = e.target.value;
+                  setPhonePrefix(newPrefix);
+                  setEditData({
+                    ...editData,
+                    phoneNumber: `${newPrefix} ${phoneDigits}`.trim(),
+                  });
+                }}
+                variant="standard"
+                sx={{
+                  width: '70px',
+                  flexShrink: 0,
+                  borderBottom: '2px solid #8C54FF',
+                  '& .MuiInput-underline:after': {
+                    borderBottomColor: colors.primary.main,
                   },
-                },
-                '& .MuiInput-underline:after': {
-                  borderBottomColor: colors.primary.main,
-                },
-              }}
-              slotProps={{
-                htmlInput: {
-                  style: { fontFamily: lexendFont.style.fontFamily },
-                },
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneAndroidIcon
-                        sx={(theme) => ({ color: theme.palette.text.primary })}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
+                }}
+                slotProps={{
+                  htmlInput: {
+                    style: {
+                      fontFamily: lexendFont.style.fontFamily,
+                      textAlign: 'center',
+                    },
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                value={phoneDigits}
+                onChange={(e) => {
+                  const newDigits = e.target.value;
+                  setPhoneDigits(newDigits);
+                  setEditData({
+                    ...editData,
+                    phoneNumber: `${phonePrefix} ${newDigits}`.trim(),
+                  });
+                }}
+                variant="standard"
+                sx={{
+                  borderBottom: '2px solid #8C54FF',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    '& .MuiInput-underline:before': {
+                      borderBottomColor: colors.primary.light,
+                    },
+                  },
+                  '& .MuiInput-underline:after': {
+                    borderBottomColor: colors.primary.main,
+                  },
+                }}
+                slotProps={{
+                  htmlInput: {
+                    style: { fontFamily: lexendFont.style.fontFamily },
+                  },
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PhoneAndroidIcon
+                          sx={(theme) => ({
+                            color: theme.palette.text.primary,
+                          })}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </Box>
           ) : (
             <TextField
               fullWidth
