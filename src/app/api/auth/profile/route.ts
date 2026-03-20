@@ -52,11 +52,13 @@ async function handlePut(request: NextRequest, API_URL: string, headers: any) {
   const user = (await getSession())?.user;
   const { username, picture, phoneNumber } = body;
 
+  const normalizedPhone = phoneNumber?.trim().replace(/\s+/, ' ');
+
   try {
     const response = await fetchFromGyCoding(API_URL, {
       method: 'PUT',
       headers,
-      body: JSON.stringify({ username, picture, phoneNumber }),
+      body: JSON.stringify({ username, picture, phoneNumber: normalizedPhone }),
     });
 
     const data = await response.json();
