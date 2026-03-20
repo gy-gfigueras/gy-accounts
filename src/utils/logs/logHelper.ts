@@ -55,7 +55,7 @@ export async function sendLog(
   data: LogData = {}
 ): Promise<void> {
   logConsole(level, message, data);
-  return _sendLog(level, message, 'GY-ACCOUNTS-DASHBOARD', data);
+  return _sendLog(level, message, 'ACCOUNTS-DASHBOARD', data);
 }
 
 export { LogLevel, LogMessage };
