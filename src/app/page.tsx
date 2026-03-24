@@ -53,6 +53,11 @@ function Home() {
     apiKey: gyUser?.apiKey || '',
   });
 
+  const [phoneValidationError, setPhoneValidationError] = useState(false);
+
+  const isPhoneValid =
+    !isEditing || /^\+\d{1,4} \d+$/.test((editData.phoneNumber ?? '').trim());
+
   const handleOpenErrorAlert = isErrorUpdate;
   const handleOpenSuccessAlert = isUpdated;
   const handleOpenSuccessAlertRefreshApiKey = isUpdatedAPIKEY;
@@ -105,6 +110,7 @@ function Home() {
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+    setPhoneValidationError(false);
     setEditData({
       username: '',
       picture: '',
@@ -116,6 +122,11 @@ function Home() {
   };
 
   const handleSaveEdit = async () => {
+    if (!isPhoneValid) {
+      setPhoneValidationError(true);
+      return;
+    }
+
     try {
       let base64Image = editData.picture;
 
@@ -265,6 +276,7 @@ function Home() {
                     handleSaveEdit={handleSaveEdit}
                     handleCancelEdit={handleCancelEdit}
                     isLoadingUpdate={isLoadingUpdate}
+                    isSaveDisabled={!isPhoneValid}
                   />
                 </CardContent>
               </Card>
@@ -307,6 +319,13 @@ function Home() {
         duration={5000}
         message={'API KEY Cannot be updated'}
         onClose={handleOpenSuccessAlertRefreshApiKeyErrorClose}
+      />
+      <AnimatedAlert
+        severity={ESeverity.WARNING}
+        open={phoneValidationError}
+        duration={5000}
+        message={'Phone number is required (e.g. +34 605624408)'}
+        onClose={() => setPhoneValidationError(false)}
       />
     </Box>
   );

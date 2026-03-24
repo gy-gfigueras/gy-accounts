@@ -59,6 +59,13 @@ export default function UserData({
   const [phoneDigits, setPhoneDigits] = useState(
     () => parsePhone(editData.phoneNumber).digits
   );
+  const [prefixTouched, setPrefixTouched] = useState(false);
+  const [digitsTouched, setDigitsTouched] = useState(false);
+
+  const prefixError = prefixTouched && !/^\+\d{1,4}$/.test(phonePrefix.trim());
+  const digitsError =
+    digitsTouched &&
+    (phoneDigits.trim() === '' || !/^\d+$/.test(phoneDigits.trim()));
 
   useEffect(() => {
     if (isEditing) {
@@ -66,6 +73,8 @@ export default function UserData({
       setPhonePrefix(prefix);
       setPhoneDigits(digits);
     }
+    setPrefixTouched(false);
+    setDigitsTouched(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing]);
 
@@ -203,8 +212,11 @@ export default function UserData({
                 phoneNumber: `${newPrefix} ${phoneDigits}`.trim(),
               });
             }}
+            onBlur={() => setPrefixTouched(true)}
             label="Prefix"
             variant="outlined"
+            error={prefixError}
+            helperText={prefixError ? 'Format: +XX' : ''}
             sx={{
               width: '90px',
               flexShrink: 0,
@@ -232,8 +244,11 @@ export default function UserData({
                 phoneNumber: `${phonePrefix} ${newDigits}`.trim(),
               });
             }}
+            onBlur={() => setDigitsTouched(true)}
             label="Phone"
             variant="outlined"
+            error={digitsError}
+            helperText={digitsError ? 'Phone number is required' : ''}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '&.Mui-focused fieldset': { borderColor: colors.primary.main },
@@ -412,7 +427,10 @@ export default function UserData({
                     phoneNumber: `${newPrefix} ${phoneDigits}`.trim(),
                   });
                 }}
+                onBlur={() => setPrefixTouched(true)}
                 variant="standard"
+                error={prefixError}
+                helperText={prefixError ? 'Format: +XX' : ''}
                 sx={{
                   width: '70px',
                   flexShrink: 0,
@@ -441,7 +459,10 @@ export default function UserData({
                     phoneNumber: `${phonePrefix} ${newDigits}`.trim(),
                   });
                 }}
+                onBlur={() => setDigitsTouched(true)}
                 variant="standard"
+                error={digitsError}
+                helperText={digitsError ? 'Phone number is required' : ''}
                 sx={{
                   borderBottom: '2px solid #8C54FF',
                   transition: 'all 0.3s ease',
