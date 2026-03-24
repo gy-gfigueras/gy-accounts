@@ -10,6 +10,7 @@ interface ActionsBoxProps {
   handleSaveEdit: () => void;
   handleCancelEdit: () => void;
   isLoadingUpdate: boolean;
+  isSaveDisabled?: boolean;
 }
 
 export default function ActionsBox({
@@ -18,6 +19,7 @@ export default function ActionsBox({
   handleSaveEdit,
   handleCancelEdit,
   isLoadingUpdate,
+  isSaveDisabled,
 }: ActionsBoxProps) {
   return (
     <motion.div
@@ -55,7 +57,7 @@ export default function ActionsBox({
                 width: ['100%', 'auto'],
               }}
               onClick={handleSaveEdit}
-              disabled={isLoadingUpdate}
+              disabled={isLoadingUpdate || !!isSaveDisabled}
             >
               Save Changes
             </Button>
